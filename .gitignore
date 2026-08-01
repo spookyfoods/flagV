@@ -1,0 +1,11 @@
+.DS_Store
+.idea
+*.log
+.cache/
+tmp/
+*.o
+*.tmp
+others/
+tests/
+build/
+compile_commands.json
