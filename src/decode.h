@@ -125,5 +125,11 @@ template <class... Ts> struct overloaded : Ts... {
 // Deduction Guide
 template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
+auto get_opcode(const Instruction& ins) -> std::optional<uint8_t>;
 auto get_rd(const Instruction& ins) -> std::optional<uint8_t>;
+auto get_funct3(const Instruction& ins) -> std::optional<uint8_t>;
+auto get_rs1(const Instruction& ins) -> std::optional<uint8_t>;
+auto get_rs2(const Instruction& ins) -> std::optional<uint8_t>;
+auto get_funct7(const Instruction& ins) -> std::optional<uint8_t>;
+auto get_imm(const Instruction& ins) -> std::optional<uint8_t>;
 #endif
