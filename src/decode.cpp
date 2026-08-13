@@ -1,8 +1,7 @@
 #include "decode.h"
 #include <stdexcept>
-
 auto decode(uint32_t raw_inst) -> Instruction {
-    uint8_t opcode = RV32::base::base_get_opcode(raw_inst);
+    uint8_t opcode = RV32::base::get_opcode(raw_inst);
     switch (opcode) {
     case 0x33:
         return RType{raw_inst};
@@ -28,147 +27,101 @@ auto decode(uint32_t raw_inst) -> Instruction {
 
 auto get_rd(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
-        overloaded{[](const RType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rd();
-                   },
-                   [](const IType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rd();
-                   },
-                   [](const UType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rd();
-                   },
-                   [](const JType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rd();
-                   },
+        overloaded{
+            [](const RType& inst) -> std::optional<uint8_t> {
+                return inst.get_rd();
+            },
+            [](const IType& inst) -> std::optional<uint8_t> {
+                return inst.get_rd();
+            },
+            [](const UType& inst) -> std::optional<uint8_t> {
+                return inst.get_rd();
+            },
+            [](const JType& inst) -> std::optional<uint8_t> {
+                return inst.get_rd();
+            },
 
-                   // Return std::nullopt for types without rd
-                   [](const SType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   },
-                   [](const BType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   }},
+            // Return std::nullopt for types without rd(SType and BType)
+            [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
 auto get_opcode(const Instruction& ins) -> std::optional<uint8_t> {
-    return std::visit(overloaded{
-                          [](const RType& inst) -> std::optional<uint8_t> {
-                              return RV32::base::base_get_opcode(inst.raw);
-                          },
-                          [](const IType& inst) -> std::optional<uint8_t> {
-                              return RV32::base::base_get_opcode(inst.raw);
-                          },
-                          [](const SType& inst) -> std::optional<uint8_t> {
-                              return RV32::base::base_get_opcode(inst.raw);
-                          },
-                          [](const BType& inst) -> std::optional<uint8_t> {
-                              return RV32::base::base_get_opcode(inst.raw);
-                          },
-                          [](const UType& inst) -> std::optional<uint8_t> {
-                              return RV32::base::base_get_opcode(inst.raw);
-                          },
-                          [](const JType& inst) -> std::optional<uint8_t> {
-                              return RV32::base::base_get_opcode(inst.raw);
-                          },
-                      },
-                      ins);
-}
+    return std::visit(
+        overloaded{
+            [](const auto& inst) -> std::optional<uint8_t> {
+                return RV32::base::get_opcode(inst.raw);
+            },
+        },
+        ins);
+} // ANCHOR-START: get_funct3
 auto get_funct3(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
-        overloaded{[](const RType& inst) -> std::optional<uint8_t> {
-                       return inst.get_funct3();
-                   },
-                   [](const IType& inst) -> std::optional<uint8_t> {
-                       return inst.get_funct3();
-                   },
-                   [](const SType& inst) -> std::optional<uint8_t> {
-                       return inst.get_funct3();
-                   },
-                   [](const BType& inst) -> std::optional<uint8_t> {
-                       return inst.get_funct3();
-                   },
+        overloaded{
+            [](const RType& inst) -> std::optional<uint8_t> {
+                return inst.get_funct3();
+            },
+            [](const IType& inst) -> std::optional<uint8_t> {
+                return inst.get_funct3();
+            },
+            [](const SType& inst) -> std::optional<uint8_t> {
+                return inst.get_funct3();
+            },
+            [](const BType& inst) -> std::optional<uint8_t> {
+                return inst.get_funct3();
+            },
 
-                   // Return std::nullopt for types without rd
-                   [](const UType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   },
-                   [](const JType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   }},
+            // Return std::nullopt for types without rd, UType and JType
+            [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
+// ANCHOR-END: get_funct3
 auto get_rs1(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
-        overloaded{[](const RType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs1();
-                   },
-                   [](const IType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs1();
-                   },
-                   [](const SType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs1();
-                   },
-                   [](const BType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs1();
-                   },
+        overloaded{
+            [](const RType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs1();
+            },
+            [](const IType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs1();
+            },
+            [](const SType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs1();
+            },
+            [](const BType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs1();
+            },
 
-                   // Return std::nullopt for types without rd
-                   [](const UType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   },
-                   [](const JType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   }},
+            // Return std::nullopt for types without rd UType and JType
+            [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
 auto get_rs2(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
-        overloaded{[](const RType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs2();
-                   },
-                   [](const SType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs2();
-                   },
-                   [](const BType& inst) -> std::optional<uint8_t> {
-                       return inst.get_rs2();
-                   },
+        overloaded{
+            [](const RType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs2();
+            },
+            [](const SType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs2();
+            },
+            [](const BType& inst) -> std::optional<uint8_t> {
+                return inst.get_rs2();
+            },
 
-                   // Return std::nullopt for types without rd
-                   [](const IType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   },
-                   [](const UType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   },
-                   [](const JType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   }},
+            // Return std::nullopt for types without rd: IType, UType, JType
+            [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
-auto get_imm(const Instruction& ins) -> std::optional<uint8_t> {
+auto get_imm(const Instruction& ins) -> std::optional<int32_t> {
     return std::visit(
-        overloaded{[](const IType& inst) -> std::optional<uint8_t> {
-                       return inst.get_imm();
-                   },
-                   [](const SType& inst) -> std::optional<uint8_t> {
-                       return inst.get_imm();
-                   },
-                   [](const BType& inst) -> std::optional<uint8_t> {
-                       return inst.get_imm();
-                   },
-                   [](const UType& inst) -> std::optional<uint8_t> {
-                       return inst.get_imm();
-                   },
-                   [](const JType& inst) -> std::optional<uint8_t> {
-                       return inst.get_imm();
-                   },
-
-                   // Return std::nullopt for types without rd
-                   [](const RType& inst) -> std::optional<uint8_t> {
-                       return std::nullopt;
-                   }},
+        overloaded{
+            [](const RType&) -> std::optional<int32_t> { return std::nullopt; },
+            [](const auto& inst) -> std::optional<int32_t> {
+                return inst.get_imm();
+            }},
         ins);
 }
+// §abc
 auto get_funct7(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
         overloaded{
@@ -179,3 +132,5 @@ auto get_funct7(const Instruction& ins) -> std::optional<uint8_t> {
         },
         ins);
 }
+
+// §end
