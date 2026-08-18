@@ -1,4 +1,5 @@
 #include "decode.h"
+#include "config.h"
 #include <stdexcept>
 auto decode(uint32_t raw_inst) -> Instruction {
     uint8_t opcode = RV32::base::get_opcode(raw_inst);
@@ -134,3 +135,79 @@ auto get_funct7(const Instruction& ins) -> std::optional<uint8_t> {
 }
 
 // §end
+std::ostream& operator<<(std::ostream& os, const SType& inst) {
+    if constexpr (!config::ENABLE_PRETTY_PRINTING)
+        return os;
+    return os << std::hex << "SType {\n"
+              << "  raw: " << inst.raw << "\n"
+              << "  get_funct3(): " << static_cast<unsigned>(inst.get_funct3())
+              << "\n"
+              << "  get_rs1(): " << static_cast<unsigned>(inst.get_rs1())
+              << "\n"
+              << "  get_rs2(): " << static_cast<unsigned>(inst.get_rs2())
+              << "\n"
+              << "  get_imm(): " << inst.get_imm() << "\n"
+              << "}";
+}
+std::ostream& operator<<(std::ostream& os, const IType& inst) {
+    if constexpr (!config::ENABLE_PRETTY_PRINTING)
+        return os;
+    return os << std::hex << "IType {\n"
+              << "  raw: " << inst.raw << "\n"
+              << "  get_rd(): " << static_cast<unsigned>(inst.get_rd()) << "\n"
+              << "  get_funct3(): " << static_cast<unsigned>(inst.get_funct3())
+              << "\n"
+              << "  get_rs1(): " << static_cast<unsigned>(inst.get_rs1())
+              << "\n"
+              << "  get_imm(): " << inst.get_imm() << "\n"
+              << "}";
+}
+std::ostream& operator<<(std::ostream& os, const RType& inst) {
+
+    if constexpr (!config::ENABLE_PRETTY_PRINTING)
+        return os;
+    return os << std::hex << "RType {\n"
+              << "  raw: " << inst.raw << "\n"
+              << "  get_rd(): " << static_cast<unsigned>(inst.get_rd()) << "\n"
+              << "  get_funct3(): " << static_cast<unsigned>(inst.get_funct3())
+              << "\n"
+              << "  get_rs1(): " << static_cast<unsigned>(inst.get_rs1())
+              << "\n"
+              << "  get_rs2(): " << static_cast<unsigned>(inst.get_rs2())
+              << "\n"
+              << "  get_funct7(): " << static_cast<unsigned>(inst.get_funct7())
+              << "\n"
+              << "}";
+}
+std::ostream& operator<<(std::ostream& os, const BType& inst) {
+    if constexpr (!config::ENABLE_PRETTY_PRINTING)
+        return os;
+    return os << std::hex << "BType {\n"
+              << "  raw: " << inst.raw << "\n"
+              << "  get_funct3(): " << static_cast<unsigned>(inst.get_funct3())
+              << "\n"
+              << "  get_rs1(): " << static_cast<unsigned>(inst.get_rs1())
+              << "\n"
+              << "  get_rs2(): " << static_cast<unsigned>(inst.get_rs2())
+              << "\n"
+              << "  get_imm(): " << inst.get_imm() << "\n"
+              << "}";
+}
+std::ostream& operator<<(std::ostream& os, const UType& inst) {
+    if constexpr (!config::ENABLE_PRETTY_PRINTING)
+        return os;
+    return os << std::hex << "UType {\n"
+              << "  raw: " << inst.raw << "\n"
+              << "  get_rd(): " << static_cast<unsigned>(inst.get_rd()) << "\n"
+              << "  get_imm(): " << inst.get_imm() << "\n"
+              << "}";
+}
+std::ostream& operator<<(std::ostream& os, const JType& inst) {
+    if constexpr (!config::ENABLE_PRETTY_PRINTING)
+        return os;
+    return os << std::hex << "JType {\n"
+              << "  raw: " << inst.raw << "\n"
+              << "  get_rd(): " << static_cast<unsigned>(inst.get_rd()) << "\n"
+              << "  get_imm(): " << inst.get_imm() << "\n"
+              << "}";
+}

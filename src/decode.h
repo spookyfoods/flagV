@@ -6,10 +6,10 @@
 #define DECODE_H
 
 #include <cstdint>
+#include <iostream>
 #include <optional>
 #include <variant>
 
-// ANCHOR-START: RV32
 /// @brief RV32 base ISA decoding primitives.
 namespace RV32 {
     /**
@@ -210,6 +210,22 @@ struct BType {
 struct UType {
     uint32_t raw;
     constexpr uint8_t get_rd() const { return RV32::base::get_rd(raw); }
+
+    /**
+     * @brief Extracts the upper 20-bit immediate field and shifts it into
+     * standard 32-bit format. In U-Type instructions (e.g., LUI, AUIPC), the
+     * immediate forms the upper 20 bits of a 32-bit value, with the lower 12
+     * bits set to zero.
+     *
+     * | Instruction's bits | Immediate bits |
+     * | ------------------ | -------------- |
+     * | `[31:12]`          | `[31:12]`      |
+     *
+     * @return 32-Bit Signed Integer
+     * @note The returned value is shifted left by 12 bits (`imm << 12`), making
+     * it consumption-ready for instruction execution, but it is not in its raw,
+     * unshifted (numerically accurate 20-bit) value.
+     */
     constexpr int32_t get_imm() const {
         return static_cast<int32_t>(raw & 0xFFFFF000);
     }
@@ -218,10 +234,28 @@ struct UType {
 struct JType {
     uint32_t raw;
     constexpr uint8_t get_rd() const { return RV32::base::get_rd(raw); }
+    /**
+     * @brief Reassembles and sign-extends the 21-bit jump offset.
+     *
+     * The J-format immediate is scattered across four disjoint ranges and
+     * omits bit 0, which is implicitly zero (offsets are 2-byte aligned):
+     *
+     * | Instruction bits | Immediate bits |
+     * | ---------------- | -------------- |
+     * | `[31]`           | `[20]`         |
+     * | `[19:12]`        | `[19:12]`      |
+     * | `[20]`           | `[11]`         |
+     * | `[30:21]`        | `[10:1]`       |
+     *
+     * @return The byte offset, sign-extended to 32 bits.
+     * @note The result is always even and is relative to the jump's own
+     *       address, not the next instruction.
+     */
+
     constexpr int32_t get_imm() const {
-        return (static_cast<int32_t>(raw & 0x80000000) >> 11) |
-               static_cast<int32_t>((raw & 0xFF000) | ((raw >> 9) & 0x800) |
-                                    ((raw >> 20) & 0x7FE));
+        return static_cast<int32_t>(
+            (raw & 0x80000000) | ((raw & 0x7FE00000) >> 20) |
+            ((raw & 0x100000) >> 9) | ((raw & 0xFF000) >> 11));
     }
 };
 /** @} */
@@ -245,4 +279,22 @@ auto get_rs1(const Instruction& ins) -> std::optional<uint8_t>;
 auto get_rs2(const Instruction& ins) -> std::optional<uint8_t>;
 auto get_funct7(const Instruction& ins) -> std::optional<uint8_t>;
 auto get_imm(const Instruction& ins) -> std::optional<int32_t>;
+
+// RType Overload
+std::ostream& operator<<(std::ostream& os, const RType& inst);
+
+// IType Overload
+std::ostream& operator<<(std::ostream& os, const IType& inst);
+
+// SType Overload
+std::ostream& operator<<(std::ostream& os, const SType& inst);
+
+// BType Overload
+std::ostream& operator<<(std::ostream& os, const BType& inst);
+
+// UType Overload
+std::ostream& operator<<(std::ostream& os, const UType& inst);
+
+// JType Overload
+std::ostream& operator<<(std::ostream& os, const JType& inst);
 #endif

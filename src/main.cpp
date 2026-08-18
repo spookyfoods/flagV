@@ -1,28 +1,63 @@
-#include "decode.h"
-#include "opcodes.h"
+#include "config.h"
 #include "system.h"
+#include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
+int main() {
 
-void test_bitwise(RegisterFile& rf) {
-    // lui x1, 0xF0F0F  --> x1 = 0xF0F0F000
-    machine_code(rf, decode(0xf0f0f0b7));
-    // lui x2, 0xFF000  --> x2 = 0xFF000000
-    machine_code(rf, decode(0xff000137));
+    std::vector<uint32_t> mCodes{};
 
-    // and x3, x1, x2   --> x3 = x1 & x2
-    machine_code(rf, decode(0x0020f1b3));
-    std::cout << "AND Expected: f0000000 | Actual: " << std::hex << rf.read(3)
-              << '\n';
+    if constexpr (config::LOAD_OBJDUMP_FILE) {
+        std::ifstream inputFile("objdump.txt");
+        std::string line;
 
-    // or  x4, x1, x2   --> x4 = x1 | x2
-    machine_code(rf, decode(0x0020e233));
-    std::cout << "OR  Expected: ff0f0000 | Actual: " << std::hex << rf.read(4)
-              << '\n';
+        if (!inputFile.is_open()) {
+            std::cerr << "Failed to open objdump.txt\n";
+            return 1;
+        }
 
-    // xor x5, x1, x2   --> x5 = x1 ^ x2
-    machine_code(rf, decode(0x0020c2b3));
-    std::cout << "XOR Expected: 0f0f0000 | Actual: " << std::hex << rf.read(5)
-              << '\n';
+        while (std::getline(inputFile, line)) {
+            if (!line.empty() && line.find("<") != std::string::npos) {
+                break;
+            }
+        }
+
+        while (std::getline(inputFile, line)) {
+            std::string addressToken;
+            std::string hexToken;
+            std::stringstream ss(line);
+
+            if (ss >> addressToken >> hexToken) {
+
+                if (!addressToken.empty() && addressToken.back() == ':') {
+                    try {
+                        mCodes.push_back(static_cast<uint32_t>(
+                            std::stoul(hexToken, nullptr, 16)));
+                    } catch (const std::invalid_argument&) {
+                        continue;
+                    } catch (const std::out_of_range&) {
+                        continue;
+                    }
+                }
+            }
+        }
+    } else {
+        mCodes.push_back(0x0080016f);
+    }
+    if constexpr (config::TEST_CPU_EXECUTION) {
+
+        CPU c(1 << 20);
+
+        c.load(mCodes);
+        auto memref = c.getMemRef();
+        c.run();
+        dump_state(c);
+    } else {
+
+        auto r_ins = std::get<RType>(decode(0x00c58733));
+        std::cout << r_ins;
+    }
+    return 0;
 }
-
-int main() { std::cout << std::hex << *get_opcode(decode(0xf0f0f0b7)); }

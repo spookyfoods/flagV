@@ -1,22 +1,49 @@
+#include <format>
 #include <fstream>
+#include <iostream>
 #include <sstream>
+#include <string>
 #include <vector>
+
 int main() {
     std::vector<uint32_t> mCodes{};
     std::ifstream inputFile("objdump.txt");
     std::string line;
+
+    if (!inputFile.is_open()) {
+        std::cerr << "Failed to open objdump.txt\n";
+        return 1;
+    }
+
     while (std::getline(inputFile, line)) {
-        if (line.empty() || line.find("<") == std::string::npos) {
-            continue;
+        if (!line.empty() && line.find("<") != std::string::npos) {
+            break;
         }
-        break;
     }
-    std::getline(inputFile, line);
+
     while (std::getline(inputFile, line)) {
-        std::string hex;
+        std::string addressToken;
+        std::string hexToken;
         std::stringstream ss(line);
-        ss >> hex;
-        ss >> hex;
-        mCodes.push_back(static_cast<uint32_t>(std::stoul(hex, nullptr, 16)));
+
+        if (ss >> addressToken >> hexToken) {
+
+            if (!addressToken.empty() && addressToken.back() == ':') {
+                try {
+                    mCodes.push_back(static_cast<uint32_t>(
+                        std::stoul(hexToken, nullptr, 16)));
+                } catch (const std::invalid_argument&) {
+                    continue;
+                } catch (const std::out_of_range&) {
+                    continue;
+                }
+            }
+        }
     }
+
+    for (uint32_t code : mCodes) {
+        std::cout << std::format("0x{:08x}\n", code);
+    }
+
+    return 0;
 }
