@@ -1,0 +1,12 @@
+<map id="Memory::fetch32" name="Memory::fetch32">
+<area shape="rect" id="Node000001" title="Reads 32&#45;Bit(4 Bytes) Instruction from memory." alt="" coords="406,31,526,56"/>
+<area shape="rect" id="Node000002" href="$class_memory.html#a5a15b0cbd237a1362a889a837a3416f2" title=" " alt="" coords="227,5,358,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="388,33,359,30,359,25,394,33"/>
+<area shape="rect" id="Node000003" href="$class_c_p_u.html#af4f84a4193a44aeef676abe4402b8c71" title=" " alt="" coords="251,55,334,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="394,54,335,64,334,59,389,54"/>
+<area shape="rect" id="Node000004" href="$class_c_p_u.html#af094c00d10cbb8e4aaed0e0abf90ccaa" title=" " alt="" coords="103,55,179,80"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="233,68,179,70,179,65,238,67"/>
+<area shape="rect" id="Node000005" href="$main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,55,55,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="85,68,55,70,55,65,90,67"/>
+<area shape="poly" id="edge5_Node000005_Node000005" title=" " alt="" coords="47,40,42,36,30,33,19,35,13,40,12,46,15,54,10,55,7,46,9,37,17,30,30,28,44,31,52,39"/>
+</map>

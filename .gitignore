@@ -6,11 +6,11 @@ tmp/
 *.o
 *.tmp
 others/
-tests/
+# tests/
 build/
 compile_commands.json
 Doxyfile
-CMakeLists.txt
+# CMakeLists.txt
 tests/
 src/main.cpp
-docs/
+# docs/

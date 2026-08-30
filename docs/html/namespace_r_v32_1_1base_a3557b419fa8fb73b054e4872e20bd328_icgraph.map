@@ -1,0 +1,24 @@
+<map id="RV32::base::get_opcode" name="RV32::base::get_opcode">
+<area shape="rect" id="Node000001" title="Extracts the operation code (opcode)." alt="" coords="562,79,727,104"/>
+<area shape="poly" id="edge14_Node000001_Node000001" title=" " alt="" coords="679,64,668,60,644,57,622,59,611,64,608,69,614,79,609,77,603,70,607,60,621,54,644,52,670,55,684,64"/>
+<area shape="rect" id="Node000002" href="$decode_8cpp.html#af550531f2ed609b9992cf0accb0942ec" title=" " alt="" coords="405,29,468,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="569,75,468,52,469,47,575,74"/>
+<area shape="rect" id="Node000006" href="$class_c_p_u.html#a35a8e203fab0991b2920087f90a10d13" title=" " alt="" coords="359,79,514,104"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="543,92,514,94,514,89,549,91"/>
+<area shape="rect" id="Node000007" href="$decode_8cpp.html#a4b1d1e60f374d521022fd85f18e16069" title=" " alt="" coords="392,152,481,178"/>
+<area shape="poly" id="edge11_Node000001_Node000007" title=" " alt="" coords="594,110,476,154,475,149,589,110"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="464,14,455,10,436,8,419,10,410,15,408,20,413,30,408,28,403,21,406,11,418,5,437,3,457,5,469,14"/>
+<area shape="rect" id="Node000003" href="$main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,40,55,66"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="387,35,331,29,260,23,181,22,103,30,57,44,54,40,102,25,181,17,260,18,332,24,392,33"/>
+<area shape="rect" id="Node000004" href="$class_c_p_u.html#af4f84a4193a44aeef676abe4402b8c71" title=" " alt="" coords="228,40,311,66"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="386,46,312,53,311,48,392,44"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="47,26,42,21,30,19,19,21,13,25,12,31,15,39,10,40,7,31,9,22,17,16,30,13,44,16,52,24"/>
+<area shape="rect" id="Node000005" href="$class_c_p_u.html#af094c00d10cbb8e4aaed0e0abf90ccaa" title=" " alt="" coords="103,40,179,66"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="209,54,180,55,179,50,214,52"/>
+<area shape="poly" id="edge7_Node000005_Node000003" title=" " alt="" coords="85,55,56,55,54,50,89,51"/>
+<area shape="poly" id="edge9_Node000006_Node000003" title=" " alt="" coords="341,96,228,96,165,90,102,81,56,66,55,61,103,76,165,85,228,90,346,94"/>
+<area shape="poly" id="edge10_Node000006_Node000004" title=" " alt="" coords="361,75,311,65,311,60,366,74"/>
+<area shape="poly" id="edge12_Node000007_Node000007" title=" " alt="" coords="464,136,455,133,436,131,419,133,410,137,408,143,413,153,408,150,403,143,406,134,418,128,437,125,457,128,469,137"/>
+<area shape="rect" id="Node000008" href="$decode_8h.html#a0930706ccdcce4d25d36c7c80ecacb4f" title=" " alt="" coords="227,152,311,178"/>
+<area shape="poly" id="edge13_Node000007_Node000008" title=" " alt="" coords="374,165,312,167,312,162,379,165"/>
+</map>

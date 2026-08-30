@@ -1,0 +1,24 @@
+<map id="operator&lt;&lt;" name="operator&lt;&lt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,140,90,166"/>
+<area shape="poly" id="edge13_Node000001_Node000001" title=" " alt="" coords="21,140,16,131,19,122,30,116,48,113,66,116,77,124,72,126,64,121,47,119,32,121,23,125,21,131,26,139"/>
+<area shape="rect" id="Node000002" href="$struct_s_type.html#aee55315b0ab1c5c3e745d035890783ae" title=" " alt="" coords="138,45,265,71"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,137,136,95,168,77,164,81,139,99,72,141"/>
+<area shape="rect" id="Node000004" href="$struct_s_type.html#ac11c043d2199223ccd1e3876b188c20e" title="Extracts and merges 2 disjoint set of bits, shifts into standard 32&#45;bit int format,..." alt="" coords="143,109,260,135"/>
+<area shape="poly" id="edge4_Node000001_Node000004" title=" " alt="" coords="89,142,130,135,126,139,91,147"/>
+<area shape="rect" id="Node000006" href="$struct_s_type.html#a39beec2bdbb5ad99c722cd9a37543a16" title=" " alt="" coords="147,164,256,190"/>
+<area shape="poly" id="edge7_Node000001_Node000006" title=" " alt="" coords="90,157,134,165,129,167,91,162"/>
+<area shape="rect" id="Node000008" href="$struct_s_type.html#ae264f6ec665b28c5c4c129cc66bb1995" title=" " alt="" coords="147,225,256,251"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="73,164,165,216,161,219,72,169"/>
+<area shape="rect" id="Node000003" href="$namespace_r_v32_1_1base.html#a2ecb058e0a8f2f618c02ef7ef2aec26d" title="Extracts the funct3 field." alt="" coords="313,29,472,55"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="265,50,300,49,295,51,266,55"/>
+<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="360,29,354,21,358,11,371,5,393,3,416,5,429,14,424,14,414,10,393,8,373,10,362,15,360,20,365,29"/>
+<area shape="rect" id="Node000005" href="$namespace_r_v32_1_1base.html#a198846b1866f2f03990c58d4e5af06c9" title="Extracts the destination register (rd)." alt="" coords="326,103,460,128"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="259,118,312,117,307,119,260,123"/>
+<area shape="poly" id="edge6_Node000005_Node000005" title=" " alt="" coords="360,102,354,94,358,84,371,78,393,76,416,79,429,88,424,87,414,84,393,81,373,83,362,88,360,93,365,103"/>
+<area shape="rect" id="Node000007" href="$namespace_r_v32_1_1base.html#afd7b3f4d1982d54782a567920878df9f" title="Extracts the source register 1 (rs1)." alt="" coords="322,176,463,202"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="256,178,309,183,304,184,256,183"/>
+<area shape="poly" id="edge9_Node000007_Node000007" title=" " alt="" coords="360,175,354,167,358,158,371,152,393,149,416,152,429,161,424,161,414,157,393,155,373,157,362,161,360,167,365,176"/>
+<area shape="rect" id="Node000009" href="$namespace_r_v32_1_1base.html#a379090940c172818ff0187c102fbe90a" title="Extracts the source register 2 (rs2)." alt="" coords="322,249,463,275"/>
+<area shape="poly" id="edge11_Node000008_Node000009" title=" " alt="" coords="256,242,309,251,304,251,256,248"/>
+<area shape="poly" id="edge12_Node000009_Node000009" title=" " alt="" coords="360,248,354,241,358,231,371,225,393,223,416,225,429,235,424,234,414,230,393,228,373,230,362,235,360,240,365,250"/>
+</map>

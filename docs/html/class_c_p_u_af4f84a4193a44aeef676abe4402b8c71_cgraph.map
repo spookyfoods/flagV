@@ -1,0 +1,59 @@
+<map id="CPU::step" name="CPU::step">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,461,89,487"/>
+<area shape="rect" id="Node000002" href="$decode_8cpp.html#af550531f2ed609b9992cf0accb0942ec" title=" " alt="" coords="182,141,246,167"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="53,460,197,179,201,183,58,462"/>
+<area shape="rect" id="Node000004" href="$class_c_p_u.html#a35a8e203fab0991b2920087f90a10d13" title=" " alt="" coords="137,325,291,351"/>
+<area shape="poly" id="edge5_Node000001_Node000004" title=" " alt="" coords="62,459,186,358,184,364,66,463"/>
+<area shape="rect" id="Node000020" href="$class_memory.html#a2bdcfbb1aba805977077309b13b5193e" title="Reads 32&#45;Bit(4 Bytes) Instruction from memory." alt="" coords="154,572,274,598"/>
+<area shape="poly" id="edge33_Node000001_Node000020" title=" " alt="" coords="68,485,182,562,178,565,67,490"/>
+<area shape="rect" id="Node000021" href="$class_counters.html#a7a31eaeecb4ba1aa304d0a77f99c3483" title=" " alt="" coords="351,672,492,698"/>
+<area shape="poly" id="edge36_Node000001_Node000021" title=" " alt="" coords="54,485,84,545,108,579,138,608,185,635,236,655,288,668,339,679,333,679,287,673,235,660,183,640,135,612,104,583,80,548,53,490"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="185,141,180,133,183,123,195,117,214,115,234,117,246,125,241,127,232,122,214,120,196,122,187,127,185,132,190,141"/>
+<area shape="rect" id="Node000003" href="$namespace_r_v32_1_1base.html#a3557b419fa8fb73b054e4872e20bd328" title="Extracts the operation code (opcode)." alt="" coords="339,29,504,55"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="228,139,276,102,338,64,353,59,349,63,340,69,279,106,233,142"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="387,29,381,21,385,11,399,5,422,3,446,5,460,14,455,15,445,10,422,8,400,10,389,15,387,20,393,29"/>
+<area shape="poly" id="edge8_Node000004_Node000003" title=" " alt="" coords="219,323,289,179,300,145,306,117,315,91,337,64,344,61,341,66,341,68,320,94,311,119,305,147,293,180,224,326"/>
+<area shape="rect" id="Node000005" href="$decode_8cpp.html#afc1d90e1e6520492f693f5f82cdda366" title=" " alt="" coords="380,472,463,498"/>
+<area shape="poly" id="edge6_Node000004_Node000005" title=" " alt="" coords="230,349,279,389,341,435,385,464,380,464,337,439,276,393,230,354"/>
+<area shape="rect" id="Node000006" href="$class_register_file.html#a94c4ca680078e902d7ce308f62662945" title=" " alt="" coords="360,521,484,547"/>
+<area shape="poly" id="edge9_Node000004_Node000006" title=" " alt="" coords="221,349,239,382,265,425,299,470,341,508,348,514,343,514,337,512,295,473,260,428,235,385,220,354"/>
+<area shape="rect" id="Node000007" href="$class_memory.html#a5dfd4545ed2c9b2b9c0c2296001278ae" title="Reads a 16&#45;Bit(2 Bytes) value from memory, in Little&#45;Endian format." alt="" coords="364,152,479,178"/>
+<area shape="poly" id="edge10_Node000004_Node000007" title=" " alt="" coords="220,323,264,258,298,220,337,187,352,181,348,185,341,191,301,223,268,261,225,326"/>
+<area shape="rect" id="Node000011" href="$class_memory.html#ab5be78c45920a1783e98073688184e95" title="Reads a 32&#45;Bit(4 Bytes) value from memory, in Little&#45;Endian format." alt="" coords="364,201,479,227"/>
+<area shape="poly" id="edge14_Node000004_Node000011" title=" " alt="" coords="226,323,273,280,304,257,338,236,352,231,348,235,340,241,307,261,276,284,230,327"/>
+<area shape="rect" id="Node000012" href="$class_memory.html#ae7d6e10810f99d8654f6a5338bdedbd4" title="Reads 8&#45;Bit(1&#45;Byte) from memory." alt="" coords="368,251,476,276"/>
+<area shape="poly" id="edge17_Node000004_Node000012" title=" " alt="" coords="244,323,338,285,360,280,355,283,340,290,247,327"/>
+<area shape="rect" id="Node000013" href="$trace_8h.html#abd9817f92baf08a46c000a2676bd1c80" title=" " alt="" coords="396,103,447,128"/>
+<area shape="poly" id="edge20_Node000004_Node000013" title=" " alt="" coords="217,324,232,287,257,236,292,183,313,159,337,137,358,126,383,119,379,123,360,131,341,142,317,162,296,187,261,239,237,289,222,326"/>
+<area shape="rect" id="Node000015" href="$class_register_file.html#a2c2a37efedd37e42ba1551b0870c2a73" title=" " alt="" coords="358,399,485,424"/>
+<area shape="poly" id="edge23_Node000004_Node000015" title=" " alt="" coords="246,349,340,385,360,393,355,394,338,390,247,354"/>
+<area shape="rect" id="Node000016" href="$class_memory.html#afd90234d13d00de7bcc482a9ca72bc88" title="Writes 16&#45;Bit(2 Bytes) value to memory, in Little&#45;Endian format." alt="" coords="362,623,481,648"/>
+<area shape="poly" id="edge24_Node000004_Node000016" title=" " alt="" coords="222,349,267,441,301,500,341,558,367,586,394,613,389,612,363,590,337,561,297,503,262,443,220,354"/>
+<area shape="rect" id="Node000018" href="$class_memory.html#abc7373ef5a1a1f9e6bc5e147ec43d49d" title="Writes 32&#45;Bit(4 Bytes) value to memory, in Little&#45;Endian format." alt="" coords="362,300,481,326"/>
+<area shape="poly" id="edge27_Node000004_Node000018" title=" " alt="" coords="290,326,350,320,345,323,293,331"/>
+<area shape="rect" id="Node000019" href="$class_memory.html#ae2ce79e835b44e34dd945bffd4e8e9ae" title="Writes 8&#45;Bit(1&#45;Byte) value to memory." alt="" coords="366,349,477,375"/>
+<area shape="poly" id="edge30_Node000004_Node000019" title=" " alt="" coords="291,345,353,353,348,355,292,350"/>
+<area shape="poly" id="edge7_Node000005_Node000005" title=" " alt="" coords="387,471,381,463,385,454,399,447,422,445,446,448,461,457,455,457,445,453,422,451,400,453,389,457,387,463,393,472"/>
+<area shape="rect" id="Node000008" href="$class_counters.html#a898fa9e5fc936a1e169c17092f2070ad" title=" " alt="" coords="555,201,692,227"/>
+<area shape="poly" id="edge11_Node000007_Node000008" title=" " alt="" coords="477,176,556,196,551,198,478,181"/>
+<area shape="rect" id="Node000009" href="$class_memory.html#a6e4b25b7a1a818bbfa92da41196e225a" title=" " alt="" coords="560,300,687,326"/>
+<area shape="poly" id="edge12_Node000007_Node000009" title=" " alt="" coords="479,175,506,187,522,198,532,210,554,238,602,289,597,289,550,241,528,214,518,202,503,191,480,180"/>
+<area shape="rect" id="Node000010" href="$class_memory.html#a50240c10f1d7451dc7f2caa5c4af0eca" title=" " alt="" coords="743,300,877,326"/>
+<area shape="poly" id="edge13_Node000009_Node000010" title=" " alt="" coords="686,310,730,312,725,314,688,315"/>
+<area shape="poly" id="edge15_Node000011_Node000008" title=" " alt="" coords="479,212,541,213,537,215,480,217"/>
+<area shape="poly" id="edge16_Node000011_Node000009" title=" " alt="" coords="476,225,505,236,553,261,595,290,590,291,550,266,503,241,477,230"/>
+<area shape="poly" id="edge18_Node000012_Node000008" title=" " alt="" coords="475,248,555,230,551,233,478,253"/>
+<area shape="poly" id="edge19_Node000012_Node000009" title=" " alt="" coords="476,274,556,295,551,297,477,279"/>
+<area shape="poly" id="edge22_Node000013_Node000013" title=" " alt="" coords="393,107,383,98,383,86,397,79,422,76,454,82,461,88,461,97,456,95,456,91,452,86,422,81,399,84,388,89,387,96,399,106"/>
+<area shape="rect" id="Node000014" href="$system_8cpp.html#a5b14d42484f77c1b1f930f1a21d2b66b" title=" " alt="" coords="579,103,668,128"/>
+<area shape="poly" id="edge21_Node000013_Node000014" title=" " alt="" coords="446,113,565,114,561,117,448,118"/>
+<area shape="poly" id="edge26_Node000016_Node000009" title=" " alt="" coords="478,620,502,602,523,568,530,535,530,503,525,470,520,437,520,404,528,370,550,335,551,337,555,334,554,338,533,372,525,404,525,437,530,469,535,502,536,536,528,570,506,605,480,625"/>
+<area shape="rect" id="Node000017" href="$class_counters.html#ab049ab1acb8b8784aa1f9a6a3f72f451" title=" " alt="" coords="552,349,695,375"/>
+<area shape="poly" id="edge25_Node000016_Node000017" title=" " alt="" coords="473,620,503,601,525,577,545,550,577,491,600,435,614,392,618,388,605,436,582,494,550,553,529,581,506,606,475,625"/>
+<area shape="poly" id="edge29_Node000018_Node000009" title=" " alt="" coords="480,310,547,312,542,314,482,315"/>
+<area shape="poly" id="edge28_Node000018_Node000017" title=" " alt="" coords="477,324,556,344,551,346,478,329"/>
+<area shape="poly" id="edge32_Node000019_Node000009" title=" " alt="" coords="476,346,556,329,551,331,478,351"/>
+<area shape="poly" id="edge31_Node000019_Node000017" title=" " alt="" coords="477,360,539,361,534,363,479,365"/>
+<area shape="poly" id="edge35_Node000020_Node000009" title=" " alt="" coords="274,596,329,602,390,601,420,596,450,588,478,575,503,558,523,533,532,507,532,480,529,452,525,423,525,394,532,364,550,335,551,337,555,334,554,338,537,366,530,394,530,423,534,451,538,479,537,508,528,535,506,561,480,580,452,593,421,602,390,606,328,607,274,601"/>
+<area shape="poly" id="edge34_Node000020_Node000021" title=" " alt="" coords="234,596,282,627,340,658,356,667,350,666,338,663,279,631,233,601"/>
+</map>

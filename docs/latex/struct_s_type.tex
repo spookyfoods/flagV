@@ -1,0 +1,141 @@
+\doxysection{SType Struct Reference}
+\hypertarget{struct_s_type}{}\label{struct_s_type}\index{SType@{SType}}
+
+
+{\ttfamily \+\#include $<$decode.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr uint8\+\_\+t \doxymbox{\hyperlink{struct_s_type_aee55315b0ab1c5c3e745d035890783ae}{get\+\_\+funct3}} () const
+\item 
+constexpr uint8\+\_\+t \doxymbox{\hyperlink{struct_s_type_a39beec2bdbb5ad99c722cd9a37543a16}{get\+\_\+rs1}} () const
+\item 
+constexpr uint8\+\_\+t \doxymbox{\hyperlink{struct_s_type_ae264f6ec665b28c5c4c129cc66bb1995}{get\+\_\+rs2}} () const
+\item 
+constexpr int32\+\_\+t \doxymbox{\hyperlink{struct_s_type_ac11c043d2199223ccd1e3876b188c20e}{get\+\_\+imm}} () const
+\begin{DoxyCompactList}\small\item\em Extracts and merges 2 disjoint set of bits, shifts into standard 32-\/bit int format, in \doxylink{struct_s_type}{SType} instructions the immediate serves as a positive or negative offset, relative to the addreess stored in rs1. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{struct_s_type_afd15fb9b9fe6527a0725e60313b5e767}{raw}}
+\end{DoxyCompactItemize}
+
+
+\label{struct_s_type_doc-func-members}
+\Hypertarget{struct_s_type_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_s_type_aee55315b0ab1c5c3e745d035890783ae}\index{SType@{SType}!get\_funct3@{get\_funct3}}
+\index{get\_funct3@{get\_funct3}!SType@{SType}}
+\doxysubsubsection{\texorpdfstring{get\_funct3()}{get\_funct3()}}
+{\footnotesize\ttfamily \label{struct_s_type_aee55315b0ab1c5c3e745d035890783ae} 
+uint8\+\_\+t SType::\+get\+\_\+funct3 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=331pt]{struct_s_type_aee55315b0ab1c5c3e745d035890783ae_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{struct_s_type_aee55315b0ab1c5c3e745d035890783ae_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{struct_s_type_ac11c043d2199223ccd1e3876b188c20e}\index{SType@{SType}!get\_imm@{get\_imm}}
+\index{get\_imm@{get\_imm}!SType@{SType}}
+\doxysubsubsection{\texorpdfstring{get\_imm()}{get\_imm()}}
+{\footnotesize\ttfamily \label{struct_s_type_ac11c043d2199223ccd1e3876b188c20e} 
+int32\+\_\+t SType::\+get\+\_\+imm (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Extracts and merges 2 disjoint set of bits, shifts into standard 32-\/bit int format, in \doxylink{struct_s_type}{SType} instructions the immediate serves as a positive or negative offset, relative to the addreess stored in rs1. 
+
+
+\begin{DoxyTable}{2}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}\doxylink{decode_8h_a9d5d195cf71d05175c620004ddc066bb}{Instruction}\textquotesingle{}s bits  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Immediate bits  \\
+{\ttfamily \+[31:25]}  &{\ttfamily \+[11:5]}  \\
+{\ttfamily \+[11:7]}  &{\ttfamily \+[4:0]}  \\
+\end{DoxyTable}
+
+
+\begin{DoxyReturn}{Returns}
+32-\/Bit Signed Integer 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The returned masked value is BOTH consumption-\/ready and in its numerically accurate signed integer form without padding. 
+\end{DoxyNote}
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{struct_s_type_ac11c043d2199223ccd1e3876b188c20e_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{struct_s_type_ac11c043d2199223ccd1e3876b188c20e_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{struct_s_type_a39beec2bdbb5ad99c722cd9a37543a16}\index{SType@{SType}!get\_rs1@{get\_rs1}}
+\index{get\_rs1@{get\_rs1}!SType@{SType}}
+\doxysubsubsection{\texorpdfstring{get\_rs1()}{get\_rs1()}}
+{\footnotesize\ttfamily \label{struct_s_type_a39beec2bdbb5ad99c722cd9a37543a16} 
+uint8\+\_\+t SType::\+get\+\_\+rs1 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{struct_s_type_a39beec2bdbb5ad99c722cd9a37543a16_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{struct_s_type_a39beec2bdbb5ad99c722cd9a37543a16_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{struct_s_type_ae264f6ec665b28c5c4c129cc66bb1995}\index{SType@{SType}!get\_rs2@{get\_rs2}}
+\index{get\_rs2@{get\_rs2}!SType@{SType}}
+\doxysubsubsection{\texorpdfstring{get\_rs2()}{get\_rs2()}}
+{\footnotesize\ttfamily \label{struct_s_type_ae264f6ec665b28c5c4c129cc66bb1995} 
+uint8\+\_\+t SType::\+get\+\_\+rs2 (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=304pt]{struct_s_type_ae264f6ec665b28c5c4c129cc66bb1995_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{struct_s_type_ae264f6ec665b28c5c4c129cc66bb1995_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{struct_s_type_doc-variable-members}
+\Hypertarget{struct_s_type_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_s_type_afd15fb9b9fe6527a0725e60313b5e767}\index{SType@{SType}!raw@{raw}}
+\index{raw@{raw}!SType@{SType}}
+\doxysubsubsection{\texorpdfstring{raw}{raw}}
+{\footnotesize\ttfamily \label{struct_s_type_afd15fb9b9fe6527a0725e60313b5e767} 
+uint32\+\_\+t SType::\+raw}
+
+
+
+The documentation for this struct was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+src/\doxymbox{\hyperlink{decode_8h}{decode.\+h}}\end{DoxyCompactItemize}

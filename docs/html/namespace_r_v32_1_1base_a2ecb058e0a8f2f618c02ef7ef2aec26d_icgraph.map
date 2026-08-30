@@ -1,0 +1,30 @@
+<map id="RV32::base::get_funct3" name="RV32::base::get_funct3">
+<area shape="rect" id="Node000001" title="Extracts the funct3 field." alt="" coords="489,100,649,126"/>
+<area shape="poly" id="edge7_Node000001_Node000001" title=" " alt="" coords="601,85,591,81,569,79,549,81,538,85,536,91,542,100,536,99,530,91,534,82,547,76,569,73,593,76,606,85"/>
+<area shape="rect" id="Node000002" href="$struct_b_type.html#ad5f4716b08646b3856cf452cbe475d3b" title=" " alt="" coords="138,5,265,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="513,95,441,74,265,33,265,28,442,69,518,94"/>
+<area shape="rect" id="Node000004" href="$struct_i_type.html#a8d609e61e5a87a6b233349e030c40812" title=" " alt="" coords="140,55,262,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="472,103,263,78,263,72,476,100"/>
+<area shape="rect" id="Node000006" href="$struct_r_type.html#a37d45c5ecd0718a7c8c71ca6502d9c83" title=" " alt="" coords="313,175,441,200"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="523,131,442,166,415,177,413,172,440,161,518,133"/>
+<area shape="rect" id="Node000008" href="$struct_s_type.html#aee55315b0ab1c5c3e745d035890783ae" title=" " alt="" coords="314,125,441,151"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="471,126,442,132,440,127,477,125"/>
+<area shape="rect" id="Node000003" href="$decode_8cpp.html#a24788641617570d6e576de8c2c7ee274" title=" " alt="" coords="5,5,90,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,20,91,20,89,16,124,16"/>
+<area shape="rect" id="Node000005" href="$decode_8cpp.html#af209ed8c49263cc7e633e31bccbd7fca" title=" " alt="" coords="5,55,90,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="123,69,91,70,89,65,127,66"/>
+<area shape="rect" id="Node000007" href="$decode_8cpp.html#a2c9762f961a9981e0e03409d0c9c0361" title=" " alt="" coords="5,252,90,278"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="305,207,91,258,90,252,304,202"/>
+<area shape="rect" id="Node000009" href="$decode_8cpp.html#a568734ec99df39ed4d6185af4577a0a0" title=" " alt="" coords="159,128,244,154"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="296,140,245,143,243,138,301,139"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="167,119,136,95,112,69,88,44,75,34,73,29,91,40,116,65,140,91,172,118"/>
+<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="156,122,76,84,76,78,161,119"/>
+<area shape="poly" id="edge13_Node000009_Node000007" title=" " alt="" coords="179,163,139,204,91,243,75,254,72,249,88,239,135,200,174,166"/>
+<area shape="poly" id="edge14_Node000009_Node000009" title=" " alt="" coords="226,113,218,109,201,107,185,109,177,113,175,119,180,128,175,127,170,119,173,110,184,104,201,101,220,104,231,113"/>
+<area shape="rect" id="Node000010" href="$decode_8cpp.html#a40d34be5588c98614f3ae56389e63b3e" title=" " alt="" coords="5,104,90,130"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="141,133,91,126,89,121,146,130"/>
+<area shape="rect" id="Node000011" href="$decode_8cpp.html#a86459aa858f63fbd84fb7f3a76f1529e" title=" " alt="" coords="5,153,90,179"/>
+<area shape="poly" id="edge15_Node000009_Node000011" title=" " alt="" coords="142,152,91,162,89,157,146,149"/>
+<area shape="rect" id="Node000012" href="$decode_8h.html#a0930706ccdcce4d25d36c7c80ecacb4f" title=" " alt="" coords="5,203,90,228"/>
+<area shape="poly" id="edge16_Node000009_Node000012" title=" " alt="" coords="159,163,77,204,75,200,161,158"/>
+</map>

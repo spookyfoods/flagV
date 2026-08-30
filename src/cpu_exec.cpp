@@ -130,10 +130,17 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                 switch (funct3) {
                 case ADD_SUB: {
-                    uint8_t funct7 = get_funct7(ins).value();
+                    uint8_t funct7 = ins.get_funct7();
                     uint32_t temp = regs.read(rs2);
-                    if (funct7 == SUB)
-                        temp = static_cast<uint8_t>(-temp);
+                    switch (funct7) {
+                    case ADD:
+                        break;
+                    case SUB:
+                        temp = static_cast<uint32_t>(-temp);
+                        break;
+                    default:
+                        return ExecResult::Fault;
+                    }
                     regs.write(rd,
                                static_cast<uint32_t>(regs.read(rs1) + temp));
                     return ExecResult::Continue;
@@ -157,12 +164,19 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 }
                 case SRL_SRA: {
                     uint8_t funct7 = get_funct7(ins).value();
-                    if (funct7 == SRA) {
+                    switch (funct7) {
+                    case SRA: {
                         regs.write(rd, static_cast<int32_t>(regs.read(rs1)) >>
                                            (0x1F & regs.read(rs2)));
-                    } else {
+                        break;
+                    }
+                    case SRL: {
                         regs.write(rd,
                                    regs.read(rs1) >> (0x1F & regs.read(rs2)));
+                        break;
+                    }
+                    default:
+                        return ExecResult::Fault;
                     }
                     return ExecResult::Continue;
                 }
@@ -197,11 +211,13 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                         return ExecResult::Continue;
                     }
                     case (SLLI): {
-                        regs.write(rd, regs.read(rs1) << imm);
+                        regs.write(rd, regs.read(rs1) << (imm & 0x1F));
                         return ExecResult::Continue;
                     }
                     case (SLTI): {
-                        regs.write(rd, regs.read(rs1) < imm ? 1 : 0);
+                        regs.write(
+                            rd,
+                            static_cast<int32_t>(regs.read(rs1)) < imm ? 1 : 0);
                         return ExecResult::Continue;
                     }
                     case (SLTIU): {
@@ -217,11 +233,13 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                     case (SRLI_SRAI): {
                         if (0x400 & imm) {
-                            regs.write(rd, regs.read(rs1) >> imm);
-                        } else {
                             regs.write(rd,
                                        static_cast<int32_t>(regs.read(rs1)) >>
-                                           imm);
+                                           (imm & 0x1F));
+                        } else {
+                            regs.write(rd,
+                                       static_cast<uint32_t>(regs.read(rs1)) >>
+                                           (imm & 0x1F));
                         }
                         return ExecResult::Continue;
                     }
@@ -238,42 +256,74 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                 }
                 case LOAD: {
-                    std::cerr << "NOT IMPLEMENTED YET";
-                    std::abort();
                     switch (funct3) {
                     case (LB): {
+                        int32_t byte = static_cast<int8_t>(
+                            mem.read8(regs.read(rs1) + imm, pc));
+
+                        regs.write(rd, byte);
+
                         return ExecResult::Continue;
                     }
                     case (LBU): {
+                        auto byte = static_cast<uint32_t>(
+                            mem.read8(regs.read(rs1) + imm, pc));
+                        regs.write(rd, byte);
+
                         return ExecResult::Continue;
                     }
                     case (LH): {
+                        int32_t word = static_cast<int16_t>(
+                            mem.read16(regs.read(rs1) + imm, pc));
+                        regs.write(rd, word);
                         return ExecResult::Continue;
                     }
                     case (LHU): {
+                        auto word = static_cast<uint32_t>(
+                            mem.read16(regs.read(rs1) + imm, pc));
+                        regs.write(rd, word);
                         return ExecResult::Continue;
                     }
                     case (LW): {
+                        auto word = mem.read32(regs.read(rs1) + imm, pc);
+                        regs.write(rd, word);
                         return ExecResult::Continue;
                     }
+                    default:
+                        return ExecResult::Fault;
+                        ;
                     }
                 }
                 case JALR: {
-                    std::cerr << "NOT IMPLEMENTED YET";
+                    std::cerr << "JALR NOT IMPLEMENTED YET";
                     std::abort();
                     return ExecResult::Continue;
                 }
                 case ECALL_EBREAK: {
-                    std::cerr << "NOT IMPLEMENTED YET";
-                    std::abort();
                     auto imm = ins.get_imm();
-                    if (imm) {
-                        // Then ecall
+                    if (imm == 0) {
+                        // ecall
+                        auto a7 = regs.read(17);
+                        switch (a7) {
+                        case 1: {
+                            std::println("{}",
+                                         static_cast<int32_t>(regs.read(10)));
+                            return ExecResult::Continue;
+                        }
+                        case 93: {
+                            return ExecResult::Halt;
+                        }
+                        default:
+                            return ExecResult::Fault;
+                        }
 
-                    } else {
+                    } else if (imm == 1) {
                         // ebreak
+                        return ExecResult::Fault;
+                    } else {
+
+                        return ExecResult::Fault;
                     }
-                    return ExecResult::Continue;
                 }
                 default:
                     return ExecResult::Fault;
@@ -284,17 +334,24 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 if constexpr (config::EXECUTE_CONTEXT_VERBOSE)
                     trace(ins, this);
                 auto funct3 = ins.get_funct3();
+                auto imm = ins.get_imm();
+                auto rs1 = ins.get_rs1();
+                auto rs2 = ins.get_rs2();
 
-                std::cerr << "NOT IMPLEMENTED YET";
-                std::abort();
                 switch (funct3) {
                 case (SB): {
+                    uint32_t addrToWrite = regs.read(rs1) + imm;
+                    mem.write8(addrToWrite, pc, 0x000000FF & regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case (SH): {
+                    uint32_t addrToWrite = regs.read(rs1) + imm;
+                    mem.write16(addrToWrite, pc, 0x0000FFFF & regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case (SW): {
+                    uint32_t addrToWrite = regs.read(rs1) + imm;
+                    mem.write32(addrToWrite, pc, regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 default:

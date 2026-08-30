@@ -1,0 +1,28 @@
+\doxysection{RV32 Instruction Formats }
+\hypertarget{group__formats}{}\label{group__formats}\index{RV32 Instruction Formats@{RV32 Instruction Formats}}
+
+
+Typed views over a raw instruction word, one per RISC-\/V encoding.  
+
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{struct_r_type}{RType}}
+\item 
+struct \doxymbox{\hyperlink{struct_i_type}{IType}}
+\item 
+struct \doxymbox{\hyperlink{struct_s_type}{SType}}
+\item 
+struct \doxymbox{\hyperlink{struct_b_type}{BType}}
+\item 
+struct \doxymbox{\hyperlink{struct_u_type}{UType}}
+\item 
+struct \doxymbox{\hyperlink{struct_j_type}{JType}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Typed views over a raw instruction word, one per RISC-\/V encoding. 
+
+Each type wraps the undecoded word and exposes only the fields its encoding actually defines. Field accessors delegate to \doxylink{namespace_r_v32_1_1base}{RV32::\+base}; the immediate accessors perform format-\/specific reassembly and sign extension. 

@@ -1,0 +1,5 @@
+<map id="JType::get_imm" name="JType::get_imm">
+<area shape="rect" id="Node000001" title="Reassembles and sign&#45;extends the 21&#45;bit jump offset." alt="" coords="138,5,252,31"/>
+<area shape="rect" id="Node000002" href="$decode_8cpp.html#a40d34be5588c98614f3ae56389e63b3e" title=" " alt="" coords="5,5,90,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,18,90,21,90,16,124,18"/>
+</map>

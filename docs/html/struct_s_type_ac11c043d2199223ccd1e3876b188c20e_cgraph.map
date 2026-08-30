@@ -1,0 +1,6 @@
+<map id="SType::get_imm" name="SType::get_imm">
+<area shape="rect" id="Node000001" title="Extracts and merges 2 disjoint set of bits, shifts into standard 32&#45;bit int format,..." alt="" coords="5,29,122,55"/>
+<area shape="rect" id="Node000002" href="$namespace_r_v32_1_1base.html#a198846b1866f2f03990c58d4e5af06c9" title="Extracts the destination register (rd)." alt="" coords="170,29,304,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,40,157,42,151,42,122,45"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="207,28,202,21,205,11,217,5,237,3,258,5,270,15,265,14,256,10,237,8,219,10,209,15,207,20,212,30"/>
+</map>

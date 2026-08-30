@@ -1,0 +1,150 @@
+\doxysection{RV32 Namespace Reference}
+\hypertarget{namespace_r_v32}{}\label{namespace_r_v32}\index{RV32@{RV32}}
+
+
+\doxylink{namespace_r_v32}{RV32} base ISA decoding primitives.  
+
+
+\doxysubsubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \doxymbox{\hyperlink{namespace_r_v32_1_1base}{base}}
+\begin{DoxyCompactList}\small\item\em Base Namespace, only to stress the extractors are base and not instruction specifc. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+consteval auto \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}} (int i, int j) -\/$>$ uint32\+\_\+t
+\begin{DoxyCompactList}\small\item\em Generates a contiguous 32-\/Bit Mask for bit ranges \+[i,j], inclusive. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{Indent}\textbf{ Basic RV32 instruction field bit-\/masks}\par
+\begin{DoxyCompactItemize}
+\item 
+constexpr uint32\+\_\+t \doxymbox{\hyperlink{namespace_r_v32_a289f651b2b4b209d9df1e51163154515}{OPCODE\+\_\+\+MASK}} = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(0, 6)
+\begin{DoxyCompactList}\small\item\em \+[6:0] \end{DoxyCompactList}\item 
+constexpr uint32\+\_\+t \doxymbox{\hyperlink{namespace_r_v32_a0b1f4be4c3b6f8cbb11014784a8c5062}{RD\+\_\+\+MASK}} = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(7, 11)
+\begin{DoxyCompactList}\small\item\em \+[11:7] \end{DoxyCompactList}\item 
+constexpr uint32\+\_\+t \doxymbox{\hyperlink{namespace_r_v32_a09b473411ae4f3ad78b17839e2a67bda}{FUNCT3\+\_\+\+MASK}} = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(12, 14)
+\begin{DoxyCompactList}\small\item\em \+[14:12] \end{DoxyCompactList}\item 
+constexpr uint32\+\_\+t \doxymbox{\hyperlink{namespace_r_v32_aa2c6834306bed0e7d049a561ce7aa446}{RS1\+\_\+\+MASK}} = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(15, 19)
+\begin{DoxyCompactList}\small\item\em \+[19:15] \end{DoxyCompactList}\item 
+constexpr uint32\+\_\+t \doxymbox{\hyperlink{namespace_r_v32_a08a955a65008da2b146b5eb32a976ea4}{RS2\+\_\+\+MASK}} = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(20, 24)
+\begin{DoxyCompactList}\small\item\em \+[24:20] \end{DoxyCompactList}\item 
+constexpr uint32\+\_\+t \doxymbox{\hyperlink{namespace_r_v32_ae6596d1f0b34e9dbf0a2f2fe50a67a83}{FUNCT7\+\_\+\+MASK}} = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(25, 31)
+\begin{DoxyCompactList}\small\item\em \+[31:25] \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{Indent}
+
+
+\doxysubsection{Detailed Description}
+\doxylink{namespace_r_v32}{RV32} base ISA decoding primitives. 
+
+\label{namespace_r_v32_doc-func-members}
+\Hypertarget{namespace_r_v32_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}\index{RV32@{RV32}!getAndMask@{getAndMask}}
+\index{getAndMask@{getAndMask}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{getAndMask()}{getAndMask()}}
+{\footnotesize\ttfamily \label{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1} 
+auto RV32::\+get\+And\+Mask (\begin{DoxyParamCaption}\item[{int}]{i}{, }\item[{int}]{j}{}\end{DoxyParamCaption}) -\/$>$ uint32\+\_\+t\hspace{0.3cm}{\ttfamily [consteval]}}
+
+
+
+Generates a contiguous 32-\/Bit Mask for bit ranges \+[i,j], inclusive. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & 1s filling, starting point \\
+\hline
+{\em j} & 1s filling, finishing point \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+32-\/bit unsigned integer with bits \+[i, j] set to 1. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint32\_t\ sample\_mask\ =\ \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{getAndMask}}(12,\ 25);}
+\DoxyCodeLine{\textcolor{comment}{//returns\ -\/>\ 0b0000'0011'1111'1111'1111'0000'0000'0000}}
+
+\end{DoxyCode}
+ 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+Evaluated STRICTLY at compile-\/time 
+\end{DoxyNote}
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{namespace_r_v32_doc-var-members}
+\Hypertarget{namespace_r_v32_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{namespace_r_v32_a09b473411ae4f3ad78b17839e2a67bda}\index{RV32@{RV32}!FUNCT3\_MASK@{FUNCT3\_MASK}}
+\index{FUNCT3\_MASK@{FUNCT3\_MASK}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{FUNCT3\_MASK}{FUNCT3\_MASK}}
+{\footnotesize\ttfamily \label{namespace_r_v32_a09b473411ae4f3ad78b17839e2a67bda} 
+uint32\+\_\+t RV32::\+\+FUNCT3\+\_\+\+MASK = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(12, 14)\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+\+[14:12] 
+
+\Hypertarget{namespace_r_v32_ae6596d1f0b34e9dbf0a2f2fe50a67a83}\index{RV32@{RV32}!FUNCT7\_MASK@{FUNCT7\_MASK}}
+\index{FUNCT7\_MASK@{FUNCT7\_MASK}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{FUNCT7\_MASK}{FUNCT7\_MASK}}
+{\footnotesize\ttfamily \label{namespace_r_v32_ae6596d1f0b34e9dbf0a2f2fe50a67a83} 
+uint32\+\_\+t RV32::\+\+FUNCT7\+\_\+\+MASK = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(25, 31)\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+\+[31:25] 
+
+\Hypertarget{namespace_r_v32_a289f651b2b4b209d9df1e51163154515}\index{RV32@{RV32}!OPCODE\_MASK@{OPCODE\_MASK}}
+\index{OPCODE\_MASK@{OPCODE\_MASK}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{OPCODE\_MASK}{OPCODE\_MASK}}
+{\footnotesize\ttfamily \label{namespace_r_v32_a289f651b2b4b209d9df1e51163154515} 
+uint32\+\_\+t RV32::\+\+OPCODE\+\_\+\+MASK = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(0, 6)\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+\+[6:0] 
+
+\Hypertarget{namespace_r_v32_a0b1f4be4c3b6f8cbb11014784a8c5062}\index{RV32@{RV32}!RD\_MASK@{RD\_MASK}}
+\index{RD\_MASK@{RD\_MASK}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{RD\_MASK}{RD\_MASK}}
+{\footnotesize\ttfamily \label{namespace_r_v32_a0b1f4be4c3b6f8cbb11014784a8c5062} 
+uint32\+\_\+t RV32::\+\+RD\+\_\+\+MASK = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(7, 11)\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+\+[11:7] 
+
+\Hypertarget{namespace_r_v32_aa2c6834306bed0e7d049a561ce7aa446}\index{RV32@{RV32}!RS1\_MASK@{RS1\_MASK}}
+\index{RS1\_MASK@{RS1\_MASK}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{RS1\_MASK}{RS1\_MASK}}
+{\footnotesize\ttfamily \label{namespace_r_v32_aa2c6834306bed0e7d049a561ce7aa446} 
+uint32\+\_\+t RV32::\+\+RS1\+\_\+\+MASK = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(15, 19)\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+\+[19:15] 
+
+\Hypertarget{namespace_r_v32_a08a955a65008da2b146b5eb32a976ea4}\index{RV32@{RV32}!RS2\_MASK@{RS2\_MASK}}
+\index{RS2\_MASK@{RS2\_MASK}!RV32@{RV32}}
+\doxysubsubsection{\texorpdfstring{RS2\_MASK}{RS2\_MASK}}
+{\footnotesize\ttfamily \label{namespace_r_v32_a08a955a65008da2b146b5eb32a976ea4} 
+uint32\+\_\+t RV32::\+\+RS2\+\_\+\+MASK = \doxymbox{\hyperlink{namespace_r_v32_a83c6b20a1e0cd090ef36ac9b38e782a1}{get\+And\+Mask}}(20, 24)\hspace{0.3cm}{\ttfamily [constexpr]}}
+
+
+
+\+[24:20] 
+

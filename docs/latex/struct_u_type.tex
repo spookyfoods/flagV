@@ -1,0 +1,89 @@
+\doxysection{UType Struct Reference}
+\hypertarget{struct_u_type}{}\label{struct_u_type}\index{UType@{UType}}
+
+
+{\ttfamily \+\#include $<$decode.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+constexpr uint8\+\_\+t \doxymbox{\hyperlink{struct_u_type_ad3deb4f2b6bad176fd827408f11bdd1d}{get\+\_\+rd}} () const
+\item 
+constexpr int32\+\_\+t \doxymbox{\hyperlink{struct_u_type_afd335ecba376bf0620ea7bbcb98fbc0f}{get\+\_\+imm}} () const
+\begin{DoxyCompactList}\small\item\em Extracts the upper 20-\/bit immediate field and shifts it into standard 32-\/bit format. In U-\/\+Type instructions (e.\+g., LUI, AUIPC), the immediate forms the upper 20 bits of a 32-\/bit value, with the lower 12 bits set to zero. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint32\+\_\+t \doxymbox{\hyperlink{struct_u_type_a633f1b132db49a90d6ea804b6b239fd7}{raw}}
+\end{DoxyCompactItemize}
+
+
+\label{struct_u_type_doc-func-members}
+\Hypertarget{struct_u_type_doc-func-members}
+\doxysubsection{Member Function Documentation}
+\Hypertarget{struct_u_type_afd335ecba376bf0620ea7bbcb98fbc0f}\index{UType@{UType}!get\_imm@{get\_imm}}
+\index{get\_imm@{get\_imm}!UType@{UType}}
+\doxysubsubsection{\texorpdfstring{get\_imm()}{get\_imm()}}
+{\footnotesize\ttfamily \label{struct_u_type_afd335ecba376bf0620ea7bbcb98fbc0f} 
+int32\+\_\+t UType::\+get\+\_\+imm (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+
+
+Extracts the upper 20-\/bit immediate field and shifts it into standard 32-\/bit format. In U-\/\+Type instructions (e.\+g., LUI, AUIPC), the immediate forms the upper 20 bits of a 32-\/bit value, with the lower 12 bits set to zero. 
+
+
+\begin{DoxyTable}{2}{}{}{1}
+\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}\doxylink{decode_8h_a9d5d195cf71d05175c620004ddc066bb}{Instruction}\textquotesingle{}s bits  &\SetCell{c,bg=\tableheadbgcolor,font=\bfseries}Immediate bits  \\
+{\ttfamily \+[31:12]}  &{\ttfamily \+[31:12]}  \\
+\end{DoxyTable}
+
+
+\begin{DoxyReturn}{Returns}
+32-\/Bit Signed Integer 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+The returned value is shifted left by 12 bits ({\ttfamily imm \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 12}), making it consumption-\/ready for instruction execution, but it is not in its raw, unshifted (numerically accurate 20-\/bit) value. 
+\end{DoxyNote}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=267pt]{struct_u_type_afd335ecba376bf0620ea7bbcb98fbc0f_icgraph}
+\end{center}
+\end{figure}
+\Hypertarget{struct_u_type_ad3deb4f2b6bad176fd827408f11bdd1d}\index{UType@{UType}!get\_rd@{get\_rd}}
+\index{get\_rd@{get\_rd}!UType@{UType}}
+\doxysubsubsection{\texorpdfstring{get\_rd()}{get\_rd()}}
+{\footnotesize\ttfamily \label{struct_u_type_ad3deb4f2b6bad176fd827408f11bdd1d} 
+uint8\+\_\+t UType::\+get\+\_\+rd (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [constexpr]}}
+
+Here is the call graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=294pt]{struct_u_type_ad3deb4f2b6bad176fd827408f11bdd1d_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=257pt]{struct_u_type_ad3deb4f2b6bad176fd827408f11bdd1d_icgraph}
+\end{center}
+\end{figure}
+
+
+\label{struct_u_type_doc-variable-members}
+\Hypertarget{struct_u_type_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_u_type_a633f1b132db49a90d6ea804b6b239fd7}\index{UType@{UType}!raw@{raw}}
+\index{raw@{raw}!UType@{UType}}
+\doxysubsubsection{\texorpdfstring{raw}{raw}}
+{\footnotesize\ttfamily \label{struct_u_type_a633f1b132db49a90d6ea804b6b239fd7} 
+uint32\+\_\+t UType::\+raw}
+
+
+
+The documentation for this struct was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+src/\doxymbox{\hyperlink{decode_8h}{decode.\+h}}\end{DoxyCompactItemize}

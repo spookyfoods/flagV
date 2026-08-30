@@ -1,0 +1,31 @@
+<map id="operator&lt;&lt;" name="operator&lt;&lt;">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,90,80"/>
+<area shape="rect" id="Node000002" href="$struct_u_type.html#afd335ecba376bf0620ea7bbcb98fbc0f" title="Extracts the upper 20&#45;bit immediate field and shifts it into standard 32&#45;bit format...." alt="" coords="138,5,255,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,52,143,34,139,38,90,56"/>
+<area shape="rect" id="Node000003" href="$struct_u_type.html#ad3deb4f2b6bad176fd827408f11bdd1d" title=" " alt="" coords="145,55,248,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="89,65,131,66,127,69,92,70"/>
+<area shape="rect" id="Node000005" href="$decode_8cpp.html#a568734ec99df39ed4d6185af4577a0a0" title=" " alt="" coords="154,141,238,167"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="71,78,162,132,157,135,71,83"/>
+<area shape="rect" id="Node000004" href="$namespace_r_v32_1_1base.html#a198846b1866f2f03990c58d4e5af06c9" title="Extracts the destination register (rd)." alt="" coords="491,43,625,68"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="248,63,477,56,473,60,249,68"/>
+<area shape="poly" id="edge4_Node000004_Node000004" title=" " alt="" coords="525,42,520,34,523,24,537,18,558,16,581,19,595,28,589,27,579,24,558,21,538,23,527,28,525,33,531,43"/>
+<area shape="poly" id="edge17_Node000005_Node000005" title=" " alt="" coords="170,141,166,133,169,123,179,117,196,115,215,117,225,126,220,126,213,122,196,120,181,122,173,126,171,132,176,141"/>
+<area shape="rect" id="Node000006" href="$struct_s_type.html#aee55315b0ab1c5c3e745d035890783ae" title=" " alt="" coords="303,141,430,167"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="239,152,290,153,285,155,240,157"/>
+<area shape="rect" id="Node000008" href="$struct_s_type.html#ac11c043d2199223ccd1e3876b188c20e" title="Extracts and merges 2 disjoint set of bits, shifts into standard 32&#45;bit int format,..." alt="" coords="308,92,425,118"/>
+<area shape="poly" id="edge9_Node000005_Node000008" title=" " alt="" coords="238,139,307,121,303,124,240,144"/>
+<area shape="rect" id="Node000009" href="$struct_s_type.html#a39beec2bdbb5ad99c722cd9a37543a16" title=" " alt="" coords="312,191,421,216"/>
+<area shape="poly" id="edge11_Node000005_Node000009" title=" " alt="" coords="239,164,308,185,302,186,239,169"/>
+<area shape="rect" id="Node000011" href="$struct_s_type.html#ae264f6ec665b28c5c4c129cc66bb1995" title=" " alt="" coords="312,252,421,278"/>
+<area shape="poly" id="edge14_Node000005_Node000011" title=" " alt="" coords="216,165,304,227,331,245,326,244,302,231,215,170"/>
+<area shape="rect" id="Node000007" href="$namespace_r_v32_1_1base.html#a2ecb058e0a8f2f618c02ef7ef2aec26d" title="Extracts the funct3 field." alt="" coords="478,117,638,143"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="430,144,465,142,460,143,431,149"/>
+<area shape="poly" id="edge8_Node000007_Node000007" title=" " alt="" coords="526,116,520,109,523,99,537,93,558,91,581,93,595,102,589,102,579,98,558,96,538,98,527,103,525,108,531,118"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="419,89,493,72,488,74,420,94"/>
+<area shape="rect" id="Node000010" href="$namespace_r_v32_1_1base.html#afd7b3f4d1982d54782a567920878df9f" title="Extracts the source register 1 (rs1)." alt="" coords="487,191,629,216"/>
+<area shape="poly" id="edge12_Node000009_Node000010" title=" " alt="" coords="421,201,475,203,469,204,422,206"/>
+<area shape="poly" id="edge13_Node000010_Node000010" title=" " alt="" coords="526,189,520,182,523,172,537,166,558,164,581,167,595,176,589,175,579,172,558,169,538,171,527,176,525,181,531,191"/>
+<area shape="rect" id="Node000012" href="$namespace_r_v32_1_1base.html#a379090940c172818ff0187c102fbe90a" title="Extracts the source register 2 (rs2)." alt="" coords="487,264,629,290"/>
+<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="422,266,475,271,469,271,422,271"/>
+<area shape="poly" id="edge16_Node000012_Node000012" title=" " alt="" coords="526,262,520,255,523,246,537,240,558,237,581,240,595,249,589,248,579,245,558,243,538,245,527,249,525,255,530,265"/>
+</map>

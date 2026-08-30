@@ -1,0 +1,11 @@
+<map id="Counters::get_stores" name="Counters::get_stores">
+<area shape="rect" id="Node000001" title=" " alt="" coords="401,29,545,55"/>
+<area shape="rect" id="Node000002" href="$class_c_p_u.html#a5b14d42484f77c1b1f930f1a21d2b66b" title=" " alt="" coords="227,29,353,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="383,42,354,45,354,40,388,42"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="314,14,307,10,290,8,275,10,267,15,265,20,269,30,264,28,260,21,263,11,273,5,290,3,309,5,319,15"/>
+<area shape="rect" id="Node000003" href="$class_c_p_u.html#af094c00d10cbb8e4aaed0e0abf90ccaa" title=" " alt="" coords="103,29,179,55"/>
+<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="209,42,179,45,179,40,214,42"/>
+<area shape="rect" id="Node000004" href="$main_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="5,29,55,55"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="85,43,55,45,55,40,90,41"/>
+<area shape="poly" id="edge5_Node000004_Node000004" title=" " alt="" coords="47,15,42,10,30,8,19,10,13,14,12,20,15,28,10,29,7,21,9,11,17,5,30,3,44,5,52,14"/>
+</map>

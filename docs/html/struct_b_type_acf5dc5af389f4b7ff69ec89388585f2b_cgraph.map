@@ -1,0 +1,9 @@
+<map id="BType::get_imm" name="BType::get_imm">
+<area shape="rect" id="Node000001" title="Reassembles and sign&#45;extends the 13&#45;bit branch offset." alt="" coords="5,67,122,92"/>
+<area shape="rect" id="Node000002" href="$namespace_r_v32_1_1base.html#a446063e4c971808891727de8c16549bb" title="Extracts the funct7 field." alt="" coords="170,29,329,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,65,169,58,164,60,123,70"/>
+<area shape="rect" id="Node000003" href="$namespace_r_v32_1_1base.html#a198846b1866f2f03990c58d4e5af06c9" title="Extracts the destination register (rd)." alt="" coords="182,103,316,128"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="122,88,170,99,164,100,122,93"/>
+<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="218,28,212,21,216,11,228,5,249,3,272,5,285,14,280,14,270,10,249,8,230,10,220,15,217,20,223,30"/>
+<area shape="poly" id="edge4_Node000003_Node000003" title=" " alt="" coords="218,101,212,94,216,84,228,78,249,76,272,79,285,88,280,87,270,84,249,81,230,83,220,88,217,93,223,103"/>
+</map>

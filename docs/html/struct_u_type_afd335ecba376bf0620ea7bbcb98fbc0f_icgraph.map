@@ -1,0 +1,5 @@
+<map id="UType::get_imm" name="UType::get_imm">
+<area shape="rect" id="Node000001" title="Extracts the upper 20&#45;bit immediate field and shifts it into standard 32&#45;bit format...." alt="" coords="138,5,255,31"/>
+<area shape="rect" id="Node000002" href="$decode_8cpp.html#a86459aa858f63fbd84fb7f3a76f1529e" title=" " alt="" coords="5,5,90,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,18,90,21,90,16,125,18"/>
+</map>

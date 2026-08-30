@@ -1,0 +1,7 @@
+<map id="get_opcode" name="get_opcode">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,94,55"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="20,29,14,21,18,11,30,5,50,3,71,5,83,14,78,14,69,10,49,8,31,10,22,15,19,20,25,28"/>
+<area shape="rect" id="Node000002" href="$namespace_r_v32_1_1base.html#a3557b419fa8fb73b054e4872e20bd328" title="Extracts the operation code (opcode)." alt="" coords="142,29,307,55"/>
+<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="94,40,129,42,123,42,94,45"/>
+<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="194,28,189,21,192,11,205,5,224,3,246,5,258,15,253,14,244,10,224,8,206,10,196,15,194,20,199,30"/>
+</map>

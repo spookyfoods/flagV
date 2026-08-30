@@ -126,16 +126,16 @@ struct IType {
     constexpr uint8_t get_rs1() const { return RV32::base::get_rs1(raw); }
 
     /**
-     * @brief Extracts bits [ 30 , 20 ], and bit shifts into standard 32-bit
+     * @brief Extracts bits [ 31 , 20 ], and bit shifts into standard 32-bit
      * uint format, the imm field is contiguous, so extraction is simple.
      *
      * | Instruction's bits | Immediate bits |
      * | ---------------- | -------------- |
      * | `[31:20]`         | `[11:0]`        |
      *
-     * @return 32-Bit Unsigned Integer
+     * @return 32-Bit Signed Integer
      * @note The returned masked value is BOTH consumption-ready and in its
-     * numerically accurate unsigned integer form without padding.
+     * numerically accurate signed integer form without padding.
      */
     constexpr int32_t get_imm() const {
         return static_cast<int32_t>(raw) >> 20;
@@ -160,7 +160,7 @@ struct SType {
      *
      * @return 32-Bit Signed Integer
      * @note The returned masked value is BOTH consumption-ready and in its
-     * numerically accurate unsigned integer form without padding.
+     * numerically accurate signed integer form without padding.
      */
     constexpr int32_t get_imm() const {
         return (static_cast<int32_t>(raw & 0xFE000000) >> 20) |
