@@ -1,9 +1,0 @@
-<map id="Memory::fetch32" name="Memory::fetch32">
-<area shape="rect" id="Node000001" title="Reads 32&#45;Bit(4 Bytes) Instruction from memory." alt="" coords="5,31,125,56"/>
-<area shape="rect" id="Node000002" href="$class_counters.html#a7a31eaeecb4ba1aa304d0a77f99c3483" title=" " alt="" coords="173,5,314,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,32,160,30,155,31,126,38"/>
-<area shape="rect" id="Node000003" href="$class_memory.html#a6e4b25b7a1a818bbfa92da41196e225a" title=" " alt="" coords="180,55,306,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="125,49,168,57,162,57,125,54"/>
-<area shape="rect" id="Node000004" href="$class_memory.html#a50240c10f1d7451dc7f2caa5c4af0eca" title=" " alt="" coords="362,55,496,80"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="307,65,349,67,344,68,307,70"/>
-</map>

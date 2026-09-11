@@ -341,17 +341,17 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 switch (funct3) {
                 case (SB): {
                     uint32_t addrToWrite = regs.read(rs1) + imm;
-                    mem.write8(addrToWrite, pc, 0x000000FF & regs.read(rs2));
+                    mem.write<8>(addrToWrite, pc, 0x000000FF & regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case (SH): {
                     uint32_t addrToWrite = regs.read(rs1) + imm;
-                    mem.write16(addrToWrite, pc, 0x0000FFFF & regs.read(rs2));
+                    mem.write<16>(addrToWrite, pc, 0x0000FFFF & regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case (SW): {
                     uint32_t addrToWrite = regs.read(rs1) + imm;
-                    mem.write32(addrToWrite, pc, regs.read(rs2));
+                    mem.write<32>(addrToWrite, pc, regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 default:

@@ -25,7 +25,6 @@ void Memory::fail_loudly(uint32_t address, uint32_t pc, uint32_t width,
 
 uint32_t Memory::fetch32(uint32_t address) {
     size_t offset = translate(address, address, 4);
-    ctrs.inc_icount();
     return static_cast<uint32_t>(data[offset]) |
            (static_cast<uint32_t>(data[offset + 1]) << 8) |
            (static_cast<uint32_t>(data[offset + 2]) << 16) |
@@ -44,36 +43,13 @@ uint16_t Memory::read16(uint32_t address, uint32_t pc) {
     return static_cast<uint32_t>(data[offset]) |
            (static_cast<uint32_t>(data[offset + 1]) << 8);
 }
-void Memory::write16(uint32_t address, uint32_t pc, uint16_t val) {
-    size_t offset = translate(address, pc, 4);
-    ctrs.inc_stores();
-    for (int i = 0; i < 2; i++) {
-        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
-        val >>= 8;
-    }
-}
 uint32_t Memory::read32(uint32_t address, uint32_t pc) {
-    size_t offset = translate(address, pc, 2);
+    size_t offset = translate(address, pc, 4);
     ctrs.inc_loads();
     return static_cast<uint32_t>(data[offset]) |
            (static_cast<uint32_t>(data[offset + 1]) << 8) |
            (static_cast<uint32_t>(data[offset + 2]) << 16) |
            (static_cast<uint32_t>(data[offset + 3]) << 24);
-}
-
-void Memory::write8(uint32_t address, uint32_t pc, uint8_t val) {
-    size_t offset = translate(address, pc, 1);
-    ctrs.inc_stores();
-    data[offset] = val;
-}
-
-void Memory::write32(uint32_t address, uint32_t pc, uint32_t val) {
-    size_t offset = translate(address, pc, 4);
-    ctrs.inc_stores();
-    for (int i = 0; i < 4; i++) {
-        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
-        val >>= 8;
-    }
 }
 
 CPU::CPU(int _memSize)
@@ -105,11 +81,42 @@ void CPU::run() {
 void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
     pc = startAddress;
     for (int i = 0; i < insVec.size(); i++) {
-        mem.write32(startAddress + 4 * i, pc, insVec[i]);
+        uint32_t val = insVec[i];
+        size_t offset = mem.translate(startAddress + 4 * i, pc, 4);
+        for (int i = 0; i < 4; i++) {
+            mem.data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+            val >>= 8;
+        }
     }
 }
-// Temporary
-Memory& CPU::getMemRef() { return mem; }
+template <> void Memory::write<8>(uint32_t address, uint32_t pc, uint32_t val) {
+    size_t offset = translate(address, pc, 1);
+    ctrs.inc_stores();
+    for (int i = 0; i < 1; i++) {
+        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        val >>= 8;
+    }
+}
+
+template <>
+void Memory::write<16>(uint32_t address, uint32_t pc, uint32_t val) {
+    size_t offset = translate(address, pc, 2);
+    ctrs.inc_stores();
+    for (int i = 0; i < 2; i++) {
+        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        val >>= 8;
+    }
+}
+
+template <>
+void Memory::write<32>(uint32_t address, uint32_t pc, uint32_t val) {
+    size_t offset = translate(address, pc, 4);
+    ctrs.inc_stores();
+    for (int i = 0; i < 4; i++) {
+        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        val >>= 8;
+    }
+}
 
 void dump_state(const CPU& cpu) {
 
@@ -129,7 +136,7 @@ void dump_state(const CPU& cpu) {
 
     std::println(stderr,
                  "{:<7}= 0x{:08x}  |  icount={:<5} loads={:<5} stores={:<5}",
-                 "pc", cpu.pc, cpu.ctrs.get_loads(), cpu.ctrs.get_loads(),
+                 "pc", cpu.pc, cpu.ctrs.get_icount(), cpu.ctrs.get_loads(),
                  cpu.ctrs.get_stores());
 
     for (int i = 1; i < 32; i++) {

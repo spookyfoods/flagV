@@ -1,5 +1,0 @@
-<map id="IType::get_imm" name="IType::get_imm">
-<area shape="rect" id="Node000001" title="Extracts bits [ 31 , 20 ], and bit shifts into standard 32&#45;bit uint format, the imm field is contiguo..." alt="" coords="138,5,249,31"/>
-<area shape="rect" id="Node000002" href="$decode_8cpp.html#af209ed8c49263cc7e633e31bccbd7fca" title=" " alt="" coords="5,5,90,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,18,90,21,90,16,124,18"/>
-</map>

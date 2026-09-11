@@ -1,7 +1,0 @@
-<map id="Memory::Memory" name="Memory::Memory">
-<area shape="rect" id="Node000001" title=" " alt="" coords="185,31,308,56"/>
-<area shape="rect" id="Node000002" href="$class_memory.html#a99380a9fcf78020c641ee9c9274b912c" title=" " alt="" coords="9,5,133,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,33,133,30,133,24,172,32"/>
-<area shape="rect" id="Node000003" href="$class_memory.html#a5a15b0cbd237a1362a889a837a3416f2" title=" " alt="" coords="5,55,137,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,54,137,61,136,56,172,54"/>
-</map>

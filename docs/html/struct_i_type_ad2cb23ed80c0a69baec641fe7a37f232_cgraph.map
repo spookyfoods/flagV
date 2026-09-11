@@ -1,6 +1,0 @@
-<map id="IType::get_rs1" name="IType::get_rs1">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,29,110,55"/>
-<area shape="rect" id="Node000002" href="$namespace_r_v32_1_1base.html#afd7b3f4d1982d54782a567920878df9f" title="Extracts the source register 1 (rs1)." alt="" coords="158,29,299,55"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,40,145,42,139,42,110,45"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="199,28,194,21,197,11,209,5,228,3,249,5,261,15,256,14,247,10,228,8,211,10,201,15,199,20,204,30"/>
-</map>

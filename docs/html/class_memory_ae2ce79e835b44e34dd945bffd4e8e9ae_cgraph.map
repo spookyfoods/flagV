@@ -1,9 +1,0 @@
-<map id="Memory::write8" name="Memory::write8">
-<area shape="rect" id="Node000001" title="Writes 8&#45;Bit(1&#45;Byte) value to memory." alt="" coords="5,31,117,56"/>
-<area shape="rect" id="Node000002" href="$class_counters.html#ab049ab1acb8b8784aa1f9a6a3f72f451" title=" " alt="" coords="165,5,307,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,33,152,30,147,31,118,38"/>
-<area shape="rect" id="Node000003" href="$class_memory.html#a6e4b25b7a1a818bbfa92da41196e225a" title=" " alt="" coords="173,55,299,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,48,160,56,155,57,117,54"/>
-<area shape="rect" id="Node000004" href="$class_memory.html#a50240c10f1d7451dc7f2caa5c4af0eca" title=" " alt="" coords="355,55,489,80"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="299,65,342,67,337,68,299,70"/>
-</map>
