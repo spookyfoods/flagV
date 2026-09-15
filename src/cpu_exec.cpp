@@ -6,6 +6,7 @@
 #include "system.h"
 #include "trace.h"
 #include <iostream>
+#include <print>
 ///@brief Anonymous namespace for enums to identify instructions from their
 /// fields
 namespace FIELD_CONSTANTS {

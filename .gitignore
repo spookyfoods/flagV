@@ -11,6 +11,5 @@ build/
 compile_commands.json
 Doxyfile
 # CMakeLists.txt
-tests/
 src/main.cpp
-# docs/
+docs/

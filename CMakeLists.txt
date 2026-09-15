@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.4)
+cmake_minimum_required(VERSION 3.25)
 
 project(flagV
  VERSION 0.1
@@ -30,17 +30,17 @@ add_executable(MainApp src/main.cpp)
 
 target_link_libraries(MainApp PRIVATE DecoderLib)
 
-add_executable(ProcessObjdump others/processObjdump.cpp)
+# add_executable(ProcessObjdump others/processObjdump.cpp)
 
-target_link_libraries(ProcessObjdump PRIVATE DecoderLib)
+# target_link_libraries(ProcessObjdump PRIVATE DecoderLib)
 
-add_executable(OtherTests others/tests.cpp)
-target_link_libraries(OtherTests PRIVATE DecoderLib)
+# add_executable(OtherTests others/tests.cpp)
+# target_link_libraries(OtherTests PRIVATE DecoderLib)
 
 
 if(MSVC)
  target_compile_options(MainApp PRIVATE /W4 /WX)
- target_compile_options(ProcessObjdump PRIVATE /W4 /WX)
+ # target_compile_options(ProcessObjdump PRIVATE /W4 /WX)
 else()
   set(MY_PROJECT_WARNINGS
     -Wall
@@ -52,8 +52,8 @@ else()
     -Wold-style-cast
 )
  target_compile_options(MainApp PRIVATE ${MY_PROJECT_WARNINGS})
- target_compile_options(ProcessObjdump PRIVATE -Wall -Wextra -pedantic)
- target_compile_options(OtherTests PRIVATE -Wall -Wextra -pedantic)
+ # target_compile_options(ProcessObjdump PRIVATE ${MY_PROJECT_WARNINGS})
+ # target_compile_options(OtherTests PRIVATE ${MY_PROJECT_WARNINGS})
 endif()
 
 include(CTest)
