@@ -1,0 +1,350 @@
+// tests/test_opcodes.cpp
+//
+// Assumptions baked in here (adjust if your headers differ):
+//   - decode(uint32_t) -> Instruction        (NOT std::optional<Instruction>)
+//   - RegisterFile is default-constructible, x0 reads as 0
+//   - get_imm() on a UType returns the immediate ALREADY shifted left 12
+//
+#include "decode.h"
+#include "opcodes.h"
+#include <catch2/catch_test_macros.hpp>
+#include <cstdint>
+
+// ---------------------------------------------------------------------------
+// Field constants.
+//
+// Deliberately redeclared here instead of pulled from opcodes.cpp: those enums
+// live in an anonymous namespace and are invisible anyway, but more importantly
+// the tests should encode the SPEC, not your implementation. If you typo a
+// constant in opcodes.cpp, these must not typo along with it.
+// ---------------------------------------------------------------------------
+namespace {
+
+    constexpr uint8_t OP_R = 0b0110011;
+    constexpr uint8_t OP_LUI = 0b0110111;
+    constexpr uint8_t OP_AUIPC = 0b0010111;
+
+    constexpr uint8_t F3_ADD_SUB = 0b000;
+    constexpr uint8_t F3_SLL = 0b001;
+    constexpr uint8_t F3_SLT = 0b010;
+    constexpr uint8_t F3_SLTU = 0b011;
+    constexpr uint8_t F3_XOR = 0b100;
+    constexpr uint8_t F3_SRL_SRA = 0b101;
+    constexpr uint8_t F3_OR = 0b110;
+    constexpr uint8_t F3_AND = 0b111;
+
+    constexpr uint8_t F7_BASE = 0b0000000; // ADD, SRL
+    constexpr uint8_t F7_ALT = 0b0100000;  // SUB, SRA
+
+    // ---------------------------------------------------------------------------
+    // Encoders.
+    //
+    // Two fixes vs. your version:
+    //
+    // 1. Every field is cast to uint32_t BEFORE shifting. `uint8_t f7` promotes
+    // to
+    //    signed int, and f7 = 0x7F gives `127 << 25` which overflows a 32-bit
+    //    int. That is signed overflow -> UB. Your ADD case (f7 = 0) happened to
+    //    work; it would have bitten you later.
+    //
+    // 2. Fields are masked to their real widths, so passing rd = 40 corrupts
+    // the
+    //    rd field instead of silently smearing into funct3.
+    // ---------------------------------------------------------------------------
+    constexpr uint32_t enc_r(uint8_t f7, uint8_t rs2, uint8_t rs1, uint8_t f3,
+                             uint8_t rd, uint8_t op) {
+        return (static_cast<uint32_t>(f7 & 0x7F) << 25) |
+               (static_cast<uint32_t>(rs2 & 0x1F) << 20) |
+               (static_cast<uint32_t>(rs1 & 0x1F) << 15) |
+               (static_cast<uint32_t>(f3 & 0x07) << 12) |
+               (static_cast<uint32_t>(rd & 0x1F) << 7) |
+               (static_cast<uint32_t>(op & 0x7F));
+    }
+
+    // imm is the raw 20-bit field, UNSHIFTED. enc_u does the <<12.
+    constexpr uint32_t enc_u(uint32_t imm, uint8_t rd, uint8_t op) {
+        return ((imm & 0xFFFFF) << 12) |
+               (static_cast<uint32_t>(rd & 0x1F) << 7) |
+               (static_cast<uint32_t>(op & 0x7F));
+    }
+
+    // Convenience: encode -> decode -> execute, assert it was understood.
+    void exec_r(RegisterFile& rf, uint8_t f7, uint8_t rs2, uint8_t rs1,
+                uint8_t f3, uint8_t rd) {
+        auto ok = machine_code(rf, decode(enc_r(f7, rs2, rs1, f3, rd, OP_R)));
+        REQUIRE(ok.has_value());
+        REQUIRE(*ok == true);
+    }
+
+} // namespace
+
+// ===========================================================================
+// 1. Encoder sanity — golden words from a real assembler.
+//
+// Do this before anything else. If the encoder is wrong, every downstream
+// failure is a lie. These three words came out of `riscv64-unknown-elf-as`;
+// regenerate them yourself rather than trusting me.
+// ===========================================================================
+TEST_CASE("encoder matches assembler output", "[encode]") {
+    // add x1, x5, x1
+    CHECK(enc_r(F7_BASE, 1, 5, F3_ADD_SUB, 1, OP_R) == 0x001280B3);
+    // sub x3, x1, x2
+    CHECK(enc_r(F7_ALT, 2, 1, F3_ADD_SUB, 3, OP_R) == 0x402081B3);
+    // lui x5, 0xABCDE
+    CHECK(enc_u(0xABCDE, 5, OP_LUI) == 0xABCDE2B7);
+}
+
+// ===========================================================================
+// 2. Decode round-trip.
+//
+// Your two round-trips were fine in substance; the problems were mechanical:
+//
+//   - Both TEST_CASEs were named "machine code reconstruction". Catch2 requires
+//     unique names and ABORTS AT STARTUP on a duplicate, so neither would run.
+//   - `auto ins = decode(raw_U);` at namespace scope runs during static init,
+//     before main. If decode throws or returns an empty optional, you crash
+//     with no test output at all. And `*get_imm(ins)` on a disengaged optional
+//     is UB, not a failed assertion. Everything goes inside the test body.
+//   - Dereference `*opt` only after REQUIRE(opt.has_value()), so a missing
+//     field is a named failure instead of UB.
+// ===========================================================================
+TEST_CASE("U-type decodes and re-encodes to the original word", "[decode]") {
+    const uint32_t raw = 0xABCDE2B7; // lui x5, 0xABCDE
+    const auto ins = decode(raw);
+
+    const auto imm = get_imm(ins);
+    const auto rd = get_rd(ins);
+    const auto op = get_opcode(ins);
+    REQUIRE(imm.has_value());
+    REQUIRE(rd.has_value());
+    REQUIRE(op.has_value());
+
+    CHECK(*rd == 5);
+    CHECK(*op == OP_LUI);
+
+    const uint32_t recon = static_cast<uint32_t>(*imm) |
+                           (static_cast<uint32_t>(*rd) << 7) |
+                           static_cast<uint32_t>(*op);
+    CHECK(recon == raw);
+}
+
+TEST_CASE("R-type decodes and re-encodes to the original word", "[decode]") {
+    const uint32_t raw = 0x001280B3; // add x1, x5, x1
+    const auto ins = decode(raw);
+
+    const auto f7 = get_funct7(ins);
+    const auto rs2 = get_rs2(ins);
+    const auto rs1 = get_rs1(ins);
+    const auto f3 = get_funct3(ins);
+    const auto rd = get_rd(ins);
+    const auto op = get_opcode(ins);
+    REQUIRE(f7.has_value());
+    REQUIRE(rs2.has_value());
+    REQUIRE(rs1.has_value());
+    REQUIRE(f3.has_value());
+    REQUIRE(rd.has_value());
+    REQUIRE(op.has_value());
+
+    // Assert the fields individually too. A round-trip alone can pass even if
+    // rs1 and rs2 are swapped, since the re-encode swaps them right back.
+    CHECK(*f7 == 0);
+    CHECK(*rs2 == 1);
+    CHECK(*rs1 == 5);
+    CHECK(*f3 == F3_ADD_SUB);
+    CHECK(*rd == 1);
+    CHECK(*op == OP_R);
+
+    const uint32_t recon = (static_cast<uint32_t>(*f7) << 25) |
+                           (static_cast<uint32_t>(*rs2) << 20) |
+                           (static_cast<uint32_t>(*rs1) << 15) |
+                           (static_cast<uint32_t>(*f3) << 12) |
+                           (static_cast<uint32_t>(*rd) << 7) |
+                           static_cast<uint32_t>(*op);
+    CHECK(recon == raw);
+}
+
+// ===========================================================================
+// 3. Execution — R-type. This is where the real bugs are.
+// ===========================================================================
+TEST_CASE("ADD", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 10);
+    rf.write(2, 3);
+    exec_r(rf, F7_BASE, 2, 1, F3_ADD_SUB, 3);
+    CHECK(rf.read(3) == 13);
+}
+
+TEST_CASE("ADD wraps around on overflow", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0xFFFFFFFF);
+    rf.write(2, 1);
+    exec_r(rf, F7_BASE, 2, 1, F3_ADD_SUB, 3);
+    CHECK(rf.read(3) == 0);
+}
+
+// EXPECTED TO FAIL RIGHT NOW — this is the point of writing tests today.
+// opcodes.cpp does `rs2 = static_cast<uint8_t>(-rs2)`, which negates the
+// register INDEX, not the value, then reads from that garbage index.
+TEST_CASE("SUB", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 10);
+    rf.write(2, 3);
+    exec_r(rf, F7_ALT, 2, 1, F3_ADD_SUB, 3);
+    CHECK(rf.read(3) == 7);
+}
+
+TEST_CASE("SUB producing a negative result", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 3);
+    rf.write(2, 10);
+    exec_r(rf, F7_ALT, 2, 1, F3_ADD_SUB, 3);
+    CHECK(rf.read(3) == 0xFFFFFFF9); // -7
+}
+
+// The signed/unsigned pair. Same bit patterns, opposite answers — this single
+// pair catches the most common RISC-V implementation bug there is.
+TEST_CASE("SLT is signed", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0xFFFFFFFF); // -1
+    rf.write(2, 1);
+    exec_r(rf, F7_BASE, 2, 1, F3_SLT, 3);
+    CHECK(rf.read(3) == 1);
+}
+
+TEST_CASE("SLTU is unsigned", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0xFFFFFFFF); // 4294967295
+    rf.write(2, 1);
+    exec_r(rf, F7_BASE, 2, 1, F3_SLTU, 3);
+    CHECK(rf.read(3) == 0);
+}
+
+TEST_CASE("SRL zero-fills, SRA sign-fills", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0x80000000);
+    rf.write(2, 4);
+
+    exec_r(rf, F7_BASE, 2, 1, F3_SRL_SRA, 3); // SRL
+    CHECK(rf.read(3) == 0x08000000);
+
+    exec_r(rf, F7_ALT, 2, 1, F3_SRL_SRA, 4); // SRA
+    CHECK(rf.read(4) == 0xF8000000);
+}
+
+TEST_CASE("shift amount is masked to 5 bits", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0x00000010);
+    rf.write(2, 33); // 33 & 0x1F == 1
+    exec_r(rf, F7_BASE, 2, 1, F3_SLL, 3);
+    CHECK(rf.read(3) == 0x00000020);
+}
+
+TEST_CASE("shift by zero is identity", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0xDEADBEEF);
+    rf.write(2, 0);
+    exec_r(rf, F7_BASE, 2, 1, F3_SLL, 3);
+    CHECK(rf.read(3) == 0xDEADBEEF);
+}
+
+TEST_CASE("bitwise ops", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 0b1100);
+    rf.write(2, 0b1010);
+
+    exec_r(rf, F7_BASE, 2, 1, F3_XOR, 3);
+    CHECK(rf.read(3) == 0b0110);
+
+    exec_r(rf, F7_BASE, 2, 1, F3_OR, 4);
+    CHECK(rf.read(4) == 0b1110);
+
+    exec_r(rf, F7_BASE, 2, 1, F3_AND, 5);
+    CHECK(rf.read(5) == 0b1000);
+}
+
+TEST_CASE("x0 stays zero when used as rd", "[rtype][x0]") {
+    RegisterFile rf;
+    rf.write(1, 42);
+    rf.write(2, 42);
+    exec_r(rf, F7_BASE, 2, 1, F3_ADD_SUB, 0);
+    CHECK(rf.read(0) == 0);
+}
+
+TEST_CASE("x0 reads as zero when used as a source", "[rtype][x0]") {
+    RegisterFile rf;
+    rf.write(1, 99);
+    exec_r(rf, F7_BASE, 0, 1, F3_ADD_SUB, 3); // add x3, x1, x0
+    CHECK(rf.read(3) == 99);
+}
+
+// Sources must be read before the destination is written.
+TEST_CASE("rd aliasing rs1 and rs2", "[rtype]") {
+    RegisterFile rf;
+    rf.write(1, 5);
+    exec_r(rf, F7_BASE, 1, 1, F3_ADD_SUB, 1); // add x1, x1, x1
+    CHECK(rf.read(1) == 10);
+}
+
+TEST_CASE("unknown funct7 on ADD_SUB is not silently treated as ADD",
+          "[rtype][invalid]") {
+    RegisterFile rf;
+    rf.write(1, 10);
+    rf.write(2, 3);
+    // funct7 = 0b0100001 is not a legal encoding.
+    auto ok =
+        machine_code(rf, decode(enc_r(0b0100001, 2, 1, F3_ADD_SUB, 3, OP_R)));
+    CHECK_FALSE(ok.has_value());
+}
+
+// ===========================================================================
+// 4. Execution — U-type.
+// ===========================================================================
+TEST_CASE("LUI places the immediate in the upper 20 bits", "[utype]") {
+    RegisterFile rf;
+    auto ok = machine_code(rf, decode(enc_u(0xABCDE, 5, OP_LUI)));
+    REQUIRE(ok.has_value());
+    CHECK(rf.read(5) == 0xABCDE000);
+}
+
+TEST_CASE("LUI with bit 19 set does not sign-extend into a smaller value",
+          "[utype]") {
+    RegisterFile rf;
+    auto ok = machine_code(rf, decode(enc_u(0xFFFFF, 5, OP_LUI)));
+    REQUIRE(ok.has_value());
+    CHECK(rf.read(5) == 0xFFFFF000);
+}
+
+TEST_CASE("LUI to x0 is a no-op", "[utype][x0]") {
+    RegisterFile rf;
+    auto ok = machine_code(rf, decode(enc_u(0xABCDE, 0, OP_LUI)));
+    REQUIRE(ok.has_value());
+    CHECK(rf.read(0) == 0);
+}
+
+// EXPECTED TO FAIL / CANNOT PASS AS WRITTEN.
+//
+// opcodes.cpp implements AUIPC as `rf.read(0) + imm`, treating x0 as the
+// program counter. x0 is hardwired zero, so AUIPC currently computes exactly
+// the same value as LUI. There is no way to test this properly until the PC is
+// actually threaded into machine_code(). Leaving it here, failing, as the
+// reminder.
+TEST_CASE("AUIPC adds the immediate to the PC, not to x0",
+          "[utype][!mayfail]") {
+    RegisterFile rf;
+    // Once you have a PC: set it to something nonzero, e.g. 0x1000, then
+    //   CHECK(rf.read(5) == 0x1000 + 0xABCDE000);
+    // For now, assert only that AUIPC and LUI must differ for a nonzero PC.
+    auto ok = machine_code(rf, decode(enc_u(0xABCDE, 5, OP_AUIPC)));
+    REQUIRE(ok.has_value());
+    CHECK(rf.read(5) != 0xABCDE000);
+}
+
+// ===========================================================================
+// 5. Placeholders. Tagged [.] so they are skipped by default but still listed
+//    by `./unit_tests --list-tests`, keeping the gaps visible.
+// ===========================================================================
+TEST_CASE("I-type: ADDI", "[.][itype]") { FAIL("not implemented"); }
+TEST_CASE("I-type: loads", "[.][itype]") { FAIL("not implemented"); }
+TEST_CASE("S-type: stores", "[.][stype]") { FAIL("not implemented"); }
+TEST_CASE("B-type: branches", "[.][btype]") { FAIL("not implemented"); }
+TEST_CASE("J-type: JAL", "[.][jtype]") { FAIL("not implemented"); }
