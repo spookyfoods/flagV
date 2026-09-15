@@ -1,6 +1,7 @@
 #include "system.h"
 #include <cstdlib>
 #include <iostream>
+#include <print>
 
 Memory::Memory(size_t size, Counters& _ctrs) : data(size, 0), ctrs(_ctrs) {}
 
@@ -144,5 +145,5 @@ void dump_state(const CPU& cpu) {
         std::println(stderr, "x{:<2}/{:<4} 0x{:08x}", i, ABI_NAMES[i],
                      cpu.regs.read(i));
     }
-    std::print("\n\n\n");
+    std::print(stderr, "\n\n\n");
 }

@@ -251,11 +251,21 @@ struct JType {
      * @note The result is always even and is relative to the jump's own
      *       address, not the next instruction.
      */
-
     constexpr int32_t get_imm() const {
-        return static_cast<int32_t>(
-            (raw & 0x80000000) | ((raw & 0x7FE00000) >> 20) |
-            ((raw & 0x100000) >> 9) | ((raw & 0xFF000) >> 11));
+        return (static_cast<int32_t>(raw & 0x80000000) >>
+                11) | // Bit [31] -> [31:20] (Sign-extended)
+               static_cast<int32_t>(
+                   ((raw & 0x000FF000) >> 0) |  // Bits [19:12] -> [19:12]
+                   ((raw & 0x00100000) >> 9) |  // Bit [20] -> [11]
+                   ((raw & 0x7FE00000) >> 20)); // Bits [30:21] -> [10:1]
+    }
+    constexpr int32_t get_imm() {
+        int32_t imm = (static_cast<int32_t>(raw & 0x80000000)) >> 11;
+        imm |= (raw & 0x000FF000);
+        imm |= (raw & 0x00100000) >> 9;
+        imm |= (raw & 0x7FE00000) >> 20;
+
+        return imm;
     }
 };
 /** @} */
