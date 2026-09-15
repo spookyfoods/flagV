@@ -163,7 +163,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     return ExecResult::Continue;
                 }
                 case SRL_SRA: {
-                    uint8_t funct7 = get_funct7(ins).value();
+                    uint8_t funct7 = ins.get_funct7();
                     switch (funct7) {
                     case SRA: {
                         regs.write(rd, static_cast<int32_t>(regs.read(rs1)) >>
@@ -291,13 +291,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                     default:
                         return ExecResult::Fault;
-                        ;
                     }
                 }
                 case JALR: {
                     std::cerr << "JALR NOT IMPLEMENTED YET";
-                    std::abort();
-                    return ExecResult::Continue;
+                    return ExecResult::Fault;
                 }
                 case ECALL_EBREAK: {
                     auto imm = ins.get_imm();
@@ -319,9 +317,8 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                     } else if (imm == 1) {
                         // ebreak
-                        return ExecResult::Fault;
+                        return ExecResult::Halt;
                     } else {
-
                         return ExecResult::Fault;
                     }
                 }
@@ -375,12 +372,12 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     take_branch = (regs.read(rs1) != regs.read(rs2));
                     break;
                 case BLT:
-                    take_branch = static_cast<int32_t>(
-                        regs.read(rs1) < static_cast<int32_t>(regs.read(rs2)));
+                    take_branch = static_cast<int32_t>(regs.read(rs1)) <
+                                  static_cast<int32_t>(regs.read(rs2));
                     break;
                 case BGE:
-                    take_branch = static_cast<int32_t>(
-                        regs.read(rs1) >= static_cast<int32_t>(regs.read(rs2)));
+                    take_branch = static_cast<int32_t>(regs.read(rs1)) >=
+                                  static_cast<int32_t>(regs.read(rs2));
                     break;
                 case BLTU:
                     take_branch = (regs.read(rs1) < regs.read(rs2));
@@ -406,7 +403,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 }
 
                 case AUIPC: {
-                    regs.write(ins.get_rd(), (regs.read(0) + ins.get_imm()));
+                    regs.write(ins.get_rd(), pc + ins.get_imm());
                     return ExecResult::Continue;
                 }
                 default:

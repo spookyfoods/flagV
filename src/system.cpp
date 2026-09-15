@@ -54,6 +54,7 @@ uint32_t Memory::read32(uint32_t address, uint32_t pc) {
 
 CPU::CPU(int _memSize)
     : ctrs(), regs(), mem(_memSize, ctrs), pc(0), result(ExecResult::Continue) {
+    regs.write(2, Memory::MEM_BASE + _memSize);
 }
 void CPU::step() {
     auto word = mem.fetch32(pc);
@@ -83,8 +84,8 @@ void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
     for (int i = 0; i < insVec.size(); i++) {
         uint32_t val = insVec[i];
         size_t offset = mem.translate(startAddress + 4 * i, pc, 4);
-        for (int i = 0; i < 4; i++) {
-            mem.data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        for (int j = 0; j < 4; j++) {
+            mem.data[offset + j] = static_cast<uint8_t>(0x000000FF & val);
             val >>= 8;
         }
     }

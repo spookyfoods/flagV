@@ -36,7 +36,7 @@ class RegisterFile {
     std::array<uint32_t, 32> regs{};
 
   public:
-    RegisterFile() = default;
+    explicit RegisterFile() = default;
     constexpr void write(uint8_t index, uint32_t value) {
         if (index == 0) {
             return;
@@ -53,7 +53,7 @@ class Memory {
     std::vector<uint8_t> data;
     Counters& ctrs;
 
-    static constexpr uint32_t MEM_BASE = 0;
+    static constexpr uint32_t MEM_BASE = 0x0;
 
     void fail_loudly(uint32_t address, uint32_t pc, uint32_t width,
                      const char* reason) const;
@@ -125,7 +125,7 @@ class Memory {
         uint32_t width = sz / 8;
         size_t offset = translate(address, pc, width);
         ctrs.inc_stores();
-        for (int i = 0; i < width; i++) {
+        for (size_t i = 0; i < width; i++) {
             data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
             val >>= 8;
         }
@@ -208,11 +208,10 @@ class CPU {
      * lifecycle
      */
     void load(std::vector<uint32_t> insVec, uint32_t startAddress = 0);
-    friend void dump_state(const CPU& cpu);
 
     ExecResult execute_context(const Instruction& ins, int32_t& pcInc);
 
-    // Testing
+    friend void dump_state(const CPU& cpu);
     friend struct CpuProbe;
 };
 void dump_state(const CPU& cpu);

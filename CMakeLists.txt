@@ -42,7 +42,16 @@ if(MSVC)
  target_compile_options(MainApp PRIVATE /W4 /WX)
  target_compile_options(ProcessObjdump PRIVATE /W4 /WX)
 else()
- target_compile_options(MainApp PRIVATE -Wall -Wconversion -Wextra -pedantic)
+  set(MY_PROJECT_WARNINGS
+    -Wall
+    -Wextra
+    -Wshadow
+    -Wpedantic
+    -Wconversion
+    -Wsign-conversion
+    -Wold-style-cast
+)
+ target_compile_options(MainApp PRIVATE ${MY_PROJECT_WARNINGS})
  target_compile_options(ProcessObjdump PRIVATE -Wall -Wextra -pedantic)
  target_compile_options(OtherTests PRIVATE -Wall -Wextra -pedantic)
 endif()
