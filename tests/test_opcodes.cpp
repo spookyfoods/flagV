@@ -24,7 +24,7 @@ namespace {
     constexpr int MEM_SIZE = 1 << 10;
 
     void exec(CPU& c, uint32_t word) {
-        int32_t pcInc = 0;
+        uint32_t pcInc = 0;
         c.execute_context(decode(word), pcInc);
     }
 

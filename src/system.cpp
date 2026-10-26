@@ -41,9 +41,11 @@ uint8_t Memory::read8(uint32_t address, uint32_t pc) {
 uint16_t Memory::read16(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 2);
     ctrs.inc_loads();
-    return static_cast<uint32_t>(data[offset]) |
-           (static_cast<uint32_t>(data[offset + 1]) << 8);
+    return static_cast<uint16_t>(
+        static_cast<uint32_t>(data[offset]) |
+        (static_cast<uint32_t>(data[offset + 1]) << 8));
 }
+
 uint32_t Memory::read32(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 4);
     ctrs.inc_loads();
@@ -53,15 +55,21 @@ uint32_t Memory::read32(uint32_t address, uint32_t pc) {
            (static_cast<uint32_t>(data[offset + 3]) << 24);
 }
 
-CPU::CPU(int _memSize)
-    : ctrs(), regs(), mem(_memSize, ctrs), pc(0), result(ExecResult::Continue) {
+CPU::CPU(uint32_t _memSize)
+    : ctrs(), regs(), mem(_memSize, ctrs), pc(Memory::MEM_BASE),
+      result(ExecResult::Continue) {
+
+    // Setting the value of register 2 aka sp (stack pointer)
+    // Since the stack grows downwards, from a higher address to a lower address
+
     regs.write(2, Memory::MEM_BASE + _memSize);
 }
+
 void CPU::step() {
     auto word = mem.fetch32(pc);
     Instruction ins = decode(word);
 
-    int32_t pcInc = 4;
+    uint32_t pcInc = 4;
     result = execute_context(ins, pcInc);
     if (result == ExecResult::Fault) {
         return;
@@ -80,21 +88,23 @@ void CPU::run() {
         dump_state(*this);
     }
 }
+
 void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
     pc = startAddress;
-    for (int i = 0; i < insVec.size(); i++) {
+    for (auto i = 0u; i < insVec.size(); i++) {
         uint32_t val = insVec[i];
         size_t offset = mem.translate(startAddress + 4 * i, pc, 4);
-        for (int j = 0; j < 4; j++) {
+        for (auto j = 0zu; j < 4; j++) {
             mem.data[offset + j] = static_cast<uint8_t>(0x000000FF & val);
             val >>= 8;
         }
     }
 }
+
 template <> void Memory::write<8>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 1);
     ctrs.inc_stores();
-    for (int i = 0; i < 1; i++) {
+    for (auto i = 0zu; i < 1; i++) {
         data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
     }
@@ -104,7 +114,7 @@ template <>
 void Memory::write<16>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 2);
     ctrs.inc_stores();
-    for (int i = 0; i < 2; i++) {
+    for (auto i = 0zu; i < 2; i++) {
         data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
     }
@@ -114,7 +124,7 @@ template <>
 void Memory::write<32>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 4);
     ctrs.inc_stores();
-    for (int i = 0; i < 4; i++) {
+    for (auto i = 0zu; i < 4; i++) {
         data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
     }
@@ -141,7 +151,7 @@ void dump_state(const CPU& cpu) {
                  "pc", cpu.pc, cpu.ctrs.get_icount(), cpu.ctrs.get_loads(),
                  cpu.ctrs.get_stores());
 
-    for (int i = 1; i < 32; i++) {
+    for (uint8_t i = 1; i < 32; i++) {
         std::println(stderr, "x{:<2}/{:<4} 0x{:08x}", i, ABI_NAMES[i],
                      cpu.regs.read(i));
     }

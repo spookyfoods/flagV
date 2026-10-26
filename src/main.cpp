@@ -1,29 +1,30 @@
 #include "loader.h"
 #include "system.h"
+#include <iostream>
 
-#include <cstdio>
-#include <exception>
-#include <string>
+int main(int argc, char* argv[]) {
+  // Default to 'fact.bin' if no file is provided as an argument
+  std::string binary_path = (argc > 1) ? argv[1] : "fact.bin";
 
-namespace {
-    constexpr int kMemSize = 1 << 20;              // 1 MB
-    constexpr uint32_t kStartAddress = 0x00000000; // must match -Ttext
-} // namespace
+  try {
+    std::cout << "[+] Loading binary file: " << binary_path << std::endl;
 
-int main(int argc, char** argv) {
-    if (argc < 2) {
-        std::fprintf(stderr, "usage: %s <program.bin>\n", argv[0]);
-        return 2;
-    }
+    // Use loader.h to read the file into 32-bit words
+    std::vector<uint32_t> instructions = loader::read_words(binary_path);
 
-    try {
-        CPU cpu(kMemSize);
-        cpu.load(loader::read_words(argv[1]), kStartAddress);
-        cpu.run();
-        dump_state(cpu);
-    } catch (const std::exception& e) {
-        std::fprintf(stderr, "error: %s\n", e.what());
-        return 1;
-    }
-    return 0;
+    std::cout << "\n[+] Successfully loaded " << instructions.size()
+              << " words.\n";
+    std::cout << "-------------------------------------------\n";
+    std::cout << " PC Index | Raw Hex   | Binary (32-bit)\n";
+    std::cout << "-------------------------------------------\n";
+
+    CPU c(1 << 24);
+    c.load(instructions, 0x80000000);
+    c.run();
+  } catch (const std::exception& e) {
+    std::cerr << "[-] Error: " << e.what() << std::endl;
+    return 1;
+  }
+
+  return 0;
 }

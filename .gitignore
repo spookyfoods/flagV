@@ -13,3 +13,6 @@ Doxyfile
 # CMakeLists.txt
 src/main.cpp
 docs/
+docs/study
+riscv-tests/
+study/

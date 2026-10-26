@@ -1,26 +1,37 @@
 #include "decode.h"
 #include "config.h"
+#include <iostream>
 #include <stdexcept>
+
 auto decode(uint32_t raw_inst) -> Instruction {
+    if constexpr (config::EXECUTE_CONTEXT_VERBOSE)
+        std::cout << std::hex << raw_inst << '\n';
+
     uint8_t opcode = RV32::base::get_opcode(raw_inst);
     switch (opcode) {
     case 0x33:
         return RType{raw_inst};
+
     case 0x13:
     case 0x03:
     case 0x67:
     case 0x73:
     case 0x0F:
         return IType{raw_inst};
+
     case 0x23:
         return SType{raw_inst};
+
     case 0x63:
         return BType{raw_inst};
+
     case 0x37:
     case 0x17:
         return UType{raw_inst};
+
     case 0x6F:
         return JType{raw_inst};
+
     default:
         throw std::runtime_error("Invalid Opcode");
     }
@@ -46,6 +57,7 @@ auto get_rd(const Instruction& ins) -> std::optional<uint8_t> {
             [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
+
 auto get_opcode(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
         overloaded{
@@ -55,6 +67,7 @@ auto get_opcode(const Instruction& ins) -> std::optional<uint8_t> {
         },
         ins);
 } // ANCHOR-START: get_funct3
+
 auto get_funct3(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
         overloaded{
@@ -75,6 +88,7 @@ auto get_funct3(const Instruction& ins) -> std::optional<uint8_t> {
             [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
+
 // ANCHOR-END: get_funct3
 auto get_rs1(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
@@ -96,6 +110,7 @@ auto get_rs1(const Instruction& ins) -> std::optional<uint8_t> {
             [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
+
 auto get_rs2(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
         overloaded{
@@ -113,6 +128,7 @@ auto get_rs2(const Instruction& ins) -> std::optional<uint8_t> {
             [](const auto&) -> std::optional<uint8_t> { return std::nullopt; }},
         ins);
 }
+
 auto get_imm(const Instruction& ins) -> std::optional<int32_t> {
     return std::visit(
         overloaded{
@@ -122,6 +138,7 @@ auto get_imm(const Instruction& ins) -> std::optional<int32_t> {
             }},
         ins);
 }
+
 // §abc
 auto get_funct7(const Instruction& ins) -> std::optional<uint8_t> {
     return std::visit(
@@ -149,6 +166,7 @@ std::ostream& operator<<(std::ostream& os, const SType& inst) {
               << "  get_imm(): " << inst.get_imm() << "\n"
               << "}";
 }
+
 std::ostream& operator<<(std::ostream& os, const IType& inst) {
     if constexpr (!config::ENABLE_PRETTY_PRINTING)
         return os;
@@ -162,6 +180,7 @@ std::ostream& operator<<(std::ostream& os, const IType& inst) {
               << "  get_imm(): " << inst.get_imm() << "\n"
               << "}";
 }
+
 std::ostream& operator<<(std::ostream& os, const RType& inst) {
 
     if constexpr (!config::ENABLE_PRETTY_PRINTING)
@@ -179,6 +198,7 @@ std::ostream& operator<<(std::ostream& os, const RType& inst) {
               << "\n"
               << "}";
 }
+
 std::ostream& operator<<(std::ostream& os, const BType& inst) {
     if constexpr (!config::ENABLE_PRETTY_PRINTING)
         return os;
@@ -193,6 +213,7 @@ std::ostream& operator<<(std::ostream& os, const BType& inst) {
               << "  get_imm(): " << inst.get_imm() << "\n"
               << "}";
 }
+
 std::ostream& operator<<(std::ostream& os, const UType& inst) {
     if constexpr (!config::ENABLE_PRETTY_PRINTING)
         return os;
@@ -202,6 +223,7 @@ std::ostream& operator<<(std::ostream& os, const UType& inst) {
               << "  get_imm(): " << inst.get_imm() << "\n"
               << "}";
 }
+
 std::ostream& operator<<(std::ostream& os, const JType& inst) {
     if constexpr (!config::ENABLE_PRETTY_PRINTING)
         return os;

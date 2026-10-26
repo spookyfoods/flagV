@@ -52,6 +52,7 @@ else()
     -Wold-style-cast
 )
  target_compile_options(MainApp PRIVATE ${MY_PROJECT_WARNINGS})
+ target_compile_options(DecoderLib PRIVATE ${MY_PROJECT_WARNINGS})
  # target_compile_options(ProcessObjdump PRIVATE ${MY_PROJECT_WARNINGS})
  # target_compile_options(OtherTests PRIVATE ${MY_PROJECT_WARNINGS})
 endif()

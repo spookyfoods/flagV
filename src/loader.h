@@ -18,7 +18,7 @@ namespace loader {
     inline std::vector<uint32_t> read_words(const std::string& path) {
         std::ifstream f(path, std::ios::binary | std::ios::ate);
         if (!f) {
-            throw std::runtime_error("loader: cannot open '" + path + "'");
+
         }
 
         const std::streamsize size = f.tellg();
