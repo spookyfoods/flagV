@@ -6,7 +6,7 @@ int main(int argc, char* argv[]) {
     std::string binary_path = (argc > 1) ? argv[1] : "fact.bin";
 
     try {
-        CPU cpu(1 << 20);
+        CPU cpu(1 << 24);
         cpu.load(loader::read_words(argv[1]), 0x80000000);
         if (cpu.run(100'000) == ExecResult::Halt) {
             const uint32_t a0 = cpu.reg(10);

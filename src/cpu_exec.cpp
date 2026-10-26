@@ -286,14 +286,19 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     switch (funct3) {
                     case (LB): {
 
-                        regs.write(rd, static_cast<uint32_t>(imm));
+                        auto byte =
+                            static_cast<int32_t>(static_cast<int8_t>(mem.read8(
+                                regs.read(rs1) + static_cast<uint32_t>(imm),
+                                pc)));
+
+                        regs.write(rd, static_cast<reg_t>(byte));
 
                         return ExecResult::Continue;
                     }
                     case (LBU): {
-                        auto byte = static_cast<uint32_t>(mem.read8(
-                            regs.read(rs1) + static_cast<uint32_t>(imm), pc));
-                        regs.write(rd, byte);
+                        auto byte = mem.read8(
+                            regs.read(rs1) + static_cast<uint32_t>(imm), pc);
+                        regs.write(rd, static_cast<reg_t>(byte));
 
                         return ExecResult::Continue;
                     }
@@ -327,6 +332,9 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                         regs.write(rd, pc + 4);
                         pcInc = target_pc - pc;
                         return ExecResult::Continue;
+                    } else {
+
+                        return ExecResult::Fault;
                     }
                 }
                 case ECALL_EBREAK_SYSTEM: {
@@ -335,7 +343,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     switch (funct3) {
 
                     case ECALL_EBREAK: {
-                        if (imm == 0) {
+                        if (funct12 == 0x302) {
+                            pcInc = csr_read(0x341) - pc;
+                            return ExecResult::Continue;
+                        }
+                        if (funct12 == 0) {
                             // ecall
                             auto a7 = regs.read(17);
                             switch (a7) {
@@ -350,7 +362,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                             default:
                                 return ExecResult::Fault;
                             }
-                        } else if (imm == 1) {
+                        } else if (funct12 == 1) {
                             // ebreak
                             return ExecResult::Halt;
                         } else {
@@ -372,24 +384,34 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                     case CSRRS: {
                         auto old_csr = csr_read(funct12);
-                        regs.write(rd, old_csr);
-                        if (rs1 != 0) { // If rs1 is x0, no write occurs
-                            csr_write(funct12, old_csr | regs.read(rs1));
+
+                        if (rd != 0) {
+                            regs.write(rd, old_csr);
+                        }
+
+                        if (rs1 != 0) {
+                            auto mask = regs.read(rs1);
+                            auto new_csr = old_csr | mask;
+                            csr_write(funct12, new_csr);
                         }
                         return ExecResult::Continue;
                     }
+
                     case CSRRC: {
                         auto old_csr = csr_read(funct12);
-                        regs.write(rd, old_csr);
-                        if (rs1 != 0) { // If rs1 is x0, no write occurs
-                            csr_write(funct12, old_csr & ~regs.read(rs1));
+
+                        if (rd != 0) {
+                            regs.write(rd, old_csr);
+                        }
+
+                        if (rs1 != 0) {
+                            auto mask = regs.read(rs1);
+                            auto new_csr = old_csr & ~mask;
+                            csr_write(funct12, new_csr);
                         }
                         return ExecResult::Continue;
                     }
                     case CSRRWI: {
-                        // For immediate variants, the rs1 field itself holds
-                        // the zimm value. We must cast it to reg_t to satisfy
-                        // your strict template constraint.
                         if (rd == 0) {
                             csr_write(funct12, static_cast<reg_t>(rs1));
                         } else {
