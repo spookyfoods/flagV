@@ -6,44 +6,48 @@
 // Requires `friend struct CpuProbe;` inside CPU.
 struct CpuProbe {
     static RegisterFile& regs(CPU& c) noexcept { return c.regs; }
+
     static const RegisterFile& regs(const CPU& c) noexcept { return c.regs; }
+
     static uint32_t& pc(CPU& c) noexcept { return c.pc; }
+
     static ExecResult& result(CPU& c) noexcept { return c.result; }
+
     static Memory& mem(CPU& c) noexcept { return c.mem; }
 };
 
 namespace {
 
-    // Every opcode encoded as `op x5, x1, x2`; only the operands vary.
-    constexpr uint32_t ADD = 0x002082B3, SUB = 0x402082B3;
-    constexpr uint32_t SLL = 0x002092B3, SLT = 0x0020A2B3;
-    constexpr uint32_t SLTU = 0x0020B2B3, XOR = 0x0020C2B3;
-    constexpr uint32_t SRL = 0x0020D2B3, SRA = 0x4020D2B3;
-    constexpr uint32_t OR = 0x0020E2B3, AND = 0x0020F2B3;
+// Every opcode encoded as `op x5, x1, x2`; only the operands vary.
+constexpr uint32_t ADD = 0x002082B3, SUB = 0x402082B3;
+constexpr uint32_t SLL = 0x002092B3, SLT = 0x0020A2B3;
+constexpr uint32_t SLTU = 0x0020B2B3, XOR = 0x0020C2B3;
+constexpr uint32_t SRL = 0x0020D2B3, SRA = 0x4020D2B3;
+constexpr uint32_t OR = 0x0020E2B3, AND = 0x0020F2B3;
 
-    constexpr int MEM_SIZE = 1 << 10;
+constexpr int MEM_SIZE = 1 << 10;
 
-    void exec(CPU& c, uint32_t word) {
-        uint32_t pcInc = 0;
-        c.execute_context(decode(word), pcInc);
-    }
+void exec(CPU& c, uint32_t word) {
+    uint32_t pcInc = 0;
+    c.execute_context(decode(word), pcInc);
+}
 
-    /// Seeds x1/x2, executes, returns x5.
-    uint32_t alu(CPU& c, uint32_t word, uint32_t rs1_val, uint32_t rs2_val) {
-        CpuProbe::regs(c).write(1, rs1_val);
-        CpuProbe::regs(c).write(2, rs2_val);
-        exec(c, word);
-        return CpuProbe::regs(c).read(5);
-    }
+/// Seeds x1/x2, executes, returns x5.
+uint32_t alu(CPU& c, uint32_t word, uint32_t rs1_val, uint32_t rs2_val) {
+    CpuProbe::regs(c).write(1, rs1_val);
+    CpuProbe::regs(c).write(2, rs2_val);
+    exec(c, word);
+    return CpuProbe::regs(c).read(5);
+}
 
-    /// Seeds x1, executes an OP-IMM word (always `op x5, x1, imm`), returns x5.
-    /// The immediate lives inside the word, so each case carries its own
-    /// encoding rather than sharing a named constant.
-    uint32_t alui(CPU& c, uint32_t word, uint32_t rs1_val) {
-        CpuProbe::regs(c).write(1, rs1_val);
-        exec(c, word);
-        return CpuProbe::regs(c).read(5);
-    }
+/// Seeds x1, executes an OP-IMM word (always `op x5, x1, imm`), returns x5.
+/// The immediate lives inside the word, so each case carries its own
+/// encoding rather than sharing a named constant.
+uint32_t alui(CPU& c, uint32_t word, uint32_t rs1_val) {
+    CpuProbe::regs(c).write(1, rs1_val);
+    exec(c, word);
+    return CpuProbe::regs(c).read(5);
+}
 
 } // namespace
 
@@ -129,7 +133,7 @@ TEST_CASE("R-Type register semantics", "[cpu][execute][rtype]") {
     auto& r = CpuProbe::regs(c);
 
     SECTION("Writes to x0 are discarded, reads yield zero") {
-        r.write(1, 42);
+        r.write(1, 42u);
         exec(c, 0x00208033); // add x0, x1, x2
         REQUIRE(r.read(0) == 0);
         exec(c, 0x000085B3); // add x11, x1, x0
@@ -137,17 +141,17 @@ TEST_CASE("R-Type register semantics", "[cpu][execute][rtype]") {
     }
 
     SECTION("Operand aliasing") {
-        r.write(1, 5);
-        r.write(2, 3);
+        r.write(1, 5u);
+        r.write(2, 3u);
         exec(c, 0x002080B3); // add x1, x1, x2  (rd == rs1)
         REQUIRE(r.read(1) == 8);
         REQUIRE(r.read(2) == 3);
 
-        r.write(3, 7);
+        r.write(3, 7u);
         exec(c, 0x003181B3); // add x3, x3, x3  (all three alias)
         REQUIRE(r.read(3) == 14);
 
-        r.write(1, 0x12345678);
+        r.write(1, 0x12345678u);
         exec(c, 0x401082B3); // sub x5, x1, x1
         REQUIRE(r.read(5) == 0);
     }
@@ -155,8 +159,8 @@ TEST_CASE("R-Type register semantics", "[cpu][execute][rtype]") {
     SECTION("Only rd is modified") {
         for (uint32_t i = 1; i < 32; ++i)
             r.write(i, 0xDEADBEEF);
-        r.write(1, 5);
-        r.write(2, 3);
+        r.write(1, 5u);
+        r.write(2, 3u);
         exec(c, ADD);
         REQUIRE(r.read(5) == 8);
         for (uint32_t i = 3; i < 32; ++i)
@@ -241,7 +245,7 @@ TEST_CASE("I-Type register semantics", "[cpu][execute][itype]") {
     auto& r = CpuProbe::regs(c);
 
     SECTION("Writes to x0 are discarded, reads yield zero") {
-        r.write(1, 5);
+        r.write(1, 5u);
         exec(c, 0x00508013); // addi x0, x1, 5
         REQUIRE(r.read(0) == 0);
         exec(c, 0x02A00293); // addi x5, x0, 42  (li idiom)
@@ -249,7 +253,7 @@ TEST_CASE("I-Type register semantics", "[cpu][execute][itype]") {
     }
 
     SECTION("rd aliases rs1") {
-        r.write(1, 7);
+        r.write(1, 7u);
         exec(c, 0x00108093); // addi x1, x1, 1
         REQUIRE(r.read(1) == 8);
     }

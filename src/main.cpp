@@ -1,30 +1,23 @@
 #include "loader.h"
 #include "system.h"
-#include <iostream>
 
 int main(int argc, char* argv[]) {
-  // Default to 'fact.bin' if no file is provided as an argument
-  std::string binary_path = (argc > 1) ? argv[1] : "fact.bin";
+    // Default to 'fact.bin' if no file is provided as an argument
+    std::string binary_path = (argc > 1) ? argv[1] : "fact.bin";
 
-  try {
-    std::cout << "[+] Loading binary file: " << binary_path << std::endl;
+    try {
+        CPU cpu(1 << 20);
+        cpu.load(loader::read_words(argv[1]), 0x80000000);
+        if (cpu.run(100'000) == ExecResult::Halt) {
+            const uint32_t a0 = cpu.reg(10);
+            std::fprintf(stderr, "EXIT %u\n", a0);
+            return static_cast<int>(a0 & 0xFF); // 0 = pass
+        }
+        return 200; // fault or step limit
+    } catch (const std::exception& e) {
+        std::fprintf(stderr, "error: %s\n", e.what());
+        return 201; // e.g. unknown opcode
+    }
 
-    // Use loader.h to read the file into 32-bit words
-    std::vector<uint32_t> instructions = loader::read_words(binary_path);
-
-    std::cout << "\n[+] Successfully loaded " << instructions.size()
-              << " words.\n";
-    std::cout << "-------------------------------------------\n";
-    std::cout << " PC Index | Raw Hex   | Binary (32-bit)\n";
-    std::cout << "-------------------------------------------\n";
-
-    CPU c(1 << 24);
-    c.load(instructions, 0x80000000);
-    c.run();
-  } catch (const std::exception& e) {
-    std::cerr << "[-] Error: " << e.what() << std::endl;
-    return 1;
-  }
-
-  return 0;
+    return 0;
 }

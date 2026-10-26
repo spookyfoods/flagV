@@ -55,6 +55,8 @@ uint32_t Memory::read32(uint32_t address, uint32_t pc) {
            (static_cast<uint32_t>(data[offset + 3]) << 24);
 }
 
+uint32_t CPU::csr_read(uint16_t num) const { return csrs[num]; }
+
 CPU::CPU(uint32_t _memSize)
     : ctrs(), regs(), mem(_memSize, ctrs), pc(Memory::MEM_BASE),
       result(ExecResult::Continue) {
@@ -78,16 +80,25 @@ void CPU::step() {
     ctrs.inc_icount();
 }
 
-void CPU::run() {
-    while (result == ExecResult::Continue) {
+ExecResult CPU::run(uint64_t max_steps) {
+    for (auto s = 0ull; result == ExecResult::Continue; ++s) {
+        if (s >= max_steps) {
+            std::println(stderr, "flagV: step limit {} reached", max_steps);
+            dump_state(*this);
+            return ExecResult::Fault;
+        }
         step();
     }
-    if (result == ExecResult::Fault) {
 
+    if (result == ExecResult::Fault) {
         std::println(stderr, "ExecResult is FAULT!");
         dump_state(*this);
     }
+
+    return result;
 }
+
+uint32_t CPU::reg(uint8_t i) const { return regs.read(i); }
 
 void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
     pc = startAddress;

@@ -51,7 +51,9 @@ enum IOpcode : uint8_t {
     JALR = 0b1100111,
 
     // ECALL_EBREAK_SYSTEM
-    ECALL_EBREAK_SYSTEM = 0b1110011
+    ECALL_EBREAK_SYSTEM = 0b1110011,
+
+    MISC_MEM = 0b0001111,
 };
 
 /**
@@ -164,12 +166,14 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     return ExecResult::Continue;
                 }
                 case SLT: {
-                    regs.write(rd, (static_cast<int32_t>(regs.read(rs1)) <
-                                    static_cast<int32_t>(regs.read(rs2))));
+                    regs.write(rd, static_cast<reg_t>(
+                                       static_cast<int32_t>(regs.read(rs1)) <
+                                       static_cast<int32_t>(regs.read(rs2))));
                     return ExecResult::Continue;
                 }
                 case SLTU: {
-                    regs.write(rd, (regs.read(rs1) < regs.read(rs2)));
+                    regs.write(rd, static_cast<reg_t>(regs.read(rs1) <
+                                                      regs.read(rs2)));
                     return ExecResult::Continue;
                 }
                 case XOR: {
@@ -232,15 +236,18 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                     case (SLTI): {
                         regs.write(
-                            rd,
-                            static_cast<int32_t>(regs.read(rs1)) < imm ? 1 : 0);
+                            rd, static_cast<reg_t>(
+                                    static_cast<int32_t>(regs.read(rs1)) < imm
+                                        ? 1
+                                        : 0));
                         return ExecResult::Continue;
                     }
                     case (SLTIU): {
-                        regs.write(rd,
-                                   regs.read(rs1) < static_cast<uint32_t>(imm)
-                                       ? 1
-                                       : 0);
+                        regs.write(
+                            rd, static_cast<reg_t>(
+                                    regs.read(rs1) < static_cast<uint32_t>(imm)
+                                        ? 1
+                                        : 0));
                         return ExecResult::Continue;
                     }
                     case (XORI): {
@@ -323,6 +330,8 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                 }
                 case ECALL_EBREAK_SYSTEM: {
+                    const uint16_t funct12 = ins.raw >> 20;
+
                     switch (funct3) {
 
                     case ECALL_EBREAK: {
@@ -348,13 +357,71 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                             return ExecResult::Fault;
                         }
                     }
-                    case CSRRW:
-                    case CSRRS:
-                    case CSRRC:
-                    case CSRRWI:
-                    case CSRRSI:
-                    case CSRRCI:
+                    case CSRRW: {
+                        if (rd == 0) {
+                            csr_write(funct12, regs.read(rs1));
+                        } else {
+
+                            auto old_csr = csr_read(funct12);
+                            auto new_csr = regs.read(rs1);
+
+                            regs.write(rd, old_csr);
+                            csr_write(funct12, new_csr);
+                        }
+                        return ExecResult::Continue;
                     }
+                    case CSRRS: {
+                        auto old_csr = csr_read(funct12);
+                        regs.write(rd, old_csr);
+                        if (rs1 != 0) { // If rs1 is x0, no write occurs
+                            csr_write(funct12, old_csr | regs.read(rs1));
+                        }
+                        return ExecResult::Continue;
+                    }
+                    case CSRRC: {
+                        auto old_csr = csr_read(funct12);
+                        regs.write(rd, old_csr);
+                        if (rs1 != 0) { // If rs1 is x0, no write occurs
+                            csr_write(funct12, old_csr & ~regs.read(rs1));
+                        }
+                        return ExecResult::Continue;
+                    }
+                    case CSRRWI: {
+                        // For immediate variants, the rs1 field itself holds
+                        // the zimm value. We must cast it to reg_t to satisfy
+                        // your strict template constraint.
+                        if (rd == 0) {
+                            csr_write(funct12, static_cast<reg_t>(rs1));
+                        } else {
+                            auto old_csr = csr_read(funct12);
+                            regs.write(rd, old_csr);
+                            csr_write(funct12, static_cast<reg_t>(rs1));
+                        }
+                        return ExecResult::Continue;
+                    }
+                    case CSRRSI: {
+                        auto old_csr = csr_read(funct12);
+                        regs.write(rd, old_csr);
+                        if (rs1 != 0) { // If immediate is 0, no write occurs
+                            csr_write(funct12,
+                                      old_csr | static_cast<reg_t>(rs1));
+                        }
+                        return ExecResult::Continue;
+                    }
+                    case CSRRCI: {
+                        auto old_csr = csr_read(funct12);
+                        regs.write(rd, old_csr);
+                        if (rs1 != 0) { // If immediate is 0, no write occurs
+                            csr_write(funct12,
+                                      old_csr & ~static_cast<reg_t>(rs1));
+                        }
+                        return ExecResult::Continue;
+                    }
+                    }
+                }
+                case MISC_MEM: {
+
+                    return ExecResult::Continue;
                 }
                 default:
                     return ExecResult::Fault;
