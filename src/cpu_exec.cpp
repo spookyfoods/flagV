@@ -147,7 +147,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 switch (funct3) {
                 case ADD_SUB: {
                     uint8_t funct7 = ins.get_funct7();
-                    uint32_t temp = regs.read(rs2);
+                    uint32_t temp = m_regs.read(rs2);
                     switch (funct7) {
                     case ADD:
                         break;
@@ -157,42 +157,44 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     default:
                         return ExecResult::Fault;
                     }
-                    regs.write(rd,
-                               static_cast<uint32_t>(regs.read(rs1) + temp));
+                    m_regs.write(
+                        rd, static_cast<uint32_t>(m_regs.read(rs1) + temp));
                     return ExecResult::Continue;
                 }
                 case SLL: {
-                    regs.write(rd, regs.read(rs1) << (0x1F & regs.read(rs2)));
+                    m_regs.write(rd, m_regs.read(rs1)
+                                         << (0x1F & m_regs.read(rs2)));
                     return ExecResult::Continue;
                 }
                 case SLT: {
-                    regs.write(rd, static_cast<reg_t>(
-                                       static_cast<int32_t>(regs.read(rs1)) <
-                                       static_cast<int32_t>(regs.read(rs2))));
+                    m_regs.write(rd,
+                                 static_cast<reg_t>(
+                                     static_cast<int32_t>(m_regs.read(rs1)) <
+                                     static_cast<int32_t>(m_regs.read(rs2))));
                     return ExecResult::Continue;
                 }
                 case SLTU: {
-                    regs.write(rd, static_cast<reg_t>(regs.read(rs1) <
-                                                      regs.read(rs2)));
+                    m_regs.write(rd, static_cast<reg_t>(m_regs.read(rs1) <
+                                                        m_regs.read(rs2)));
                     return ExecResult::Continue;
                 }
                 case XOR: {
-                    regs.write(rd, regs.read(rs1) ^ regs.read(rs2));
+                    m_regs.write(rd, m_regs.read(rs1) ^ m_regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case SRL_SRA: {
                     uint8_t funct7 = ins.get_funct7();
                     switch (funct7) {
                     case SRA: {
-                        regs.write(rd,
-                                   static_cast<uint32_t>(
-                                       static_cast<int32_t>(regs.read(rs1)) >>
-                                       (regs.read(rs2) & 0x1F)));
+                        m_regs.write(
+                            rd, static_cast<uint32_t>(
+                                    static_cast<int32_t>(m_regs.read(rs1)) >>
+                                    (m_regs.read(rs2) & 0x1F)));
                         break;
                     }
                     case SRL: {
-                        regs.write(rd,
-                                   regs.read(rs1) >> (0x1F & regs.read(rs2)));
+                        m_regs.write(rd, m_regs.read(rs1) >>
+                                             (0x1F & m_regs.read(rs2)));
                         break;
                     }
                     default:
@@ -201,11 +203,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     return ExecResult::Continue;
                 }
                 case OR: {
-                    regs.write(rd, regs.read(rs1) | regs.read(rs2));
+                    m_regs.write(rd, m_regs.read(rs1) | m_regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case AND: {
-                    regs.write(rd, regs.read(rs1) & regs.read(rs2));
+                    m_regs.write(rd, m_regs.read(rs1) & m_regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 default:
@@ -226,56 +228,56 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 case OP_IMM: {
                     switch (funct3) {
                     case ADDI: {
-                        regs.write(rd,
-                                   regs.read(rs1) + static_cast<uint32_t>(imm));
+                        m_regs.write(rd, m_regs.read(rs1) +
+                                             static_cast<uint32_t>(imm));
                         return ExecResult::Continue;
                     }
                     case (SLLI): {
-                        regs.write(rd, regs.read(rs1) << (imm & 0x1F));
+                        m_regs.write(rd, m_regs.read(rs1) << (imm & 0x1F));
                         return ExecResult::Continue;
                     }
                     case (SLTI): {
-                        regs.write(
+                        m_regs.write(
                             rd, static_cast<reg_t>(
-                                    static_cast<int32_t>(regs.read(rs1)) < imm
+                                    static_cast<int32_t>(m_regs.read(rs1)) < imm
                                         ? 1
                                         : 0));
                         return ExecResult::Continue;
                     }
                     case (SLTIU): {
-                        regs.write(
-                            rd, static_cast<reg_t>(
-                                    regs.read(rs1) < static_cast<uint32_t>(imm)
-                                        ? 1
-                                        : 0));
+                        m_regs.write(rd, static_cast<reg_t>(
+                                             m_regs.read(rs1) <
+                                                     static_cast<uint32_t>(imm)
+                                                 ? 1
+                                                 : 0));
                         return ExecResult::Continue;
                     }
                     case (XORI): {
-                        regs.write(rd,
-                                   regs.read(rs1) ^ static_cast<uint32_t>(imm));
+                        m_regs.write(rd, m_regs.read(rs1) ^
+                                             static_cast<uint32_t>(imm));
                         return ExecResult::Continue;
                     }
                     case (SRLI_SRAI): {
                         if (0x400 & imm) {
-                            regs.write(
-                                rd, static_cast<uint32_t>(
-                                        static_cast<int32_t>(regs.read(rs1)) >>
-                                        (imm & 0x1F)));
+                            m_regs.write(rd, static_cast<uint32_t>(
+                                                 static_cast<int32_t>(
+                                                     m_regs.read(rs1)) >>
+                                                 (imm & 0x1F)));
                         } else {
-                            regs.write(rd,
-                                       static_cast<uint32_t>(regs.read(rs1)) >>
-                                           (imm & 0x1F));
+                            m_regs.write(
+                                rd, static_cast<uint32_t>(m_regs.read(rs1)) >>
+                                        (imm & 0x1F));
                         }
                         return ExecResult::Continue;
                     }
                     case (ORI): {
-                        regs.write(rd,
-                                   regs.read(rs1) | static_cast<uint32_t>(imm));
+                        m_regs.write(rd, m_regs.read(rs1) |
+                                             static_cast<uint32_t>(imm));
                         return ExecResult::Continue;
                     }
                     case (ANDI): {
-                        regs.write(rd,
-                                   regs.read(rs1) & static_cast<uint32_t>(imm));
+                        m_regs.write(rd, m_regs.read(rs1) &
+                                             static_cast<uint32_t>(imm));
                         return ExecResult::Continue;
                     }
                     default:
@@ -286,38 +288,42 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     switch (funct3) {
                     case (LB): {
 
-                        auto byte =
-                            static_cast<int32_t>(static_cast<int8_t>(mem.read8(
-                                regs.read(rs1) + static_cast<uint32_t>(imm),
-                                pc)));
+                        auto byte = static_cast<int32_t>(
+                            static_cast<int8_t>(m_mem.read8(
+                                m_regs.read(rs1) + static_cast<uint32_t>(imm),
+                                m_pc)));
 
-                        regs.write(rd, static_cast<reg_t>(byte));
+                        m_regs.write(rd, static_cast<reg_t>(byte));
 
                         return ExecResult::Continue;
                     }
                     case (LBU): {
-                        auto byte = mem.read8(
-                            regs.read(rs1) + static_cast<uint32_t>(imm), pc);
-                        regs.write(rd, static_cast<reg_t>(byte));
+                        auto byte = m_mem.read8(m_regs.read(rs1) +
+                                                    static_cast<uint32_t>(imm),
+                                                m_pc);
+                        m_regs.write(rd, static_cast<reg_t>(byte));
 
                         return ExecResult::Continue;
                     }
                     case (LH): {
-                        int32_t word = static_cast<int16_t>(mem.read16(
-                            regs.read(rs1) + static_cast<uint32_t>(imm), pc));
-                        regs.write(rd, static_cast<uint32_t>(word));
+                        int32_t word = static_cast<int16_t>(m_mem.read16(
+                            m_regs.read(rs1) + static_cast<uint32_t>(imm),
+                            m_pc));
+                        m_regs.write(rd, static_cast<uint32_t>(word));
                         return ExecResult::Continue;
                     }
                     case (LHU): {
-                        auto word = static_cast<uint32_t>(mem.read16(
-                            regs.read(rs1) + static_cast<uint32_t>(imm), pc));
-                        regs.write(rd, word);
+                        auto word = static_cast<uint32_t>(m_mem.read16(
+                            m_regs.read(rs1) + static_cast<uint32_t>(imm),
+                            m_pc));
+                        m_regs.write(rd, word);
                         return ExecResult::Continue;
                     }
                     case (LW): {
-                        auto word = mem.read32(
-                            regs.read(rs1) + static_cast<uint32_t>(imm), pc);
-                        regs.write(rd, word);
+                        auto word = m_mem.read32(m_regs.read(rs1) +
+                                                     static_cast<uint32_t>(imm),
+                                                 m_pc);
+                        m_regs.write(rd, word);
                         return ExecResult::Continue;
                     }
                     default:
@@ -326,11 +332,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 }
                 case JALR: {
                     if (funct3 == 0) {
-                        uint32_t src1 = regs.read(rs1);
+                        uint32_t src1 = m_regs.read(rs1);
                         uint32_t target_pc =
                             (src1 + static_cast<uint32_t>(imm)) & ~1u;
-                        regs.write(rd, pc + 4);
-                        pcInc = target_pc - pc;
+                        m_regs.write(rd, m_pc + 4);
+                        pcInc = target_pc - m_pc;
                         return ExecResult::Continue;
                     } else {
 
@@ -344,16 +350,16 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                     case ECALL_EBREAK: {
                         if (funct12 == 0x302) {
-                            pcInc = csr_read(0x341) - pc;
+                            pcInc = csr_read(0x341) - m_pc;
                             return ExecResult::Continue;
                         }
                         if (funct12 == 0) {
                             // ecall
-                            auto a7 = regs.read(17);
+                            auto a7 = m_regs.read(17);
                             switch (a7) {
                             case 1: {
-                                std::println(
-                                    "{}", static_cast<int32_t>(regs.read(10)));
+                                std::println("{}", static_cast<int32_t>(
+                                                       m_regs.read(10)));
                                 return ExecResult::Continue;
                             }
                             case 93: {
@@ -371,13 +377,13 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                     case CSRRW: {
                         if (rd == 0) {
-                            csr_write(funct12, regs.read(rs1));
+                            csr_write(funct12, m_regs.read(rs1));
                         } else {
 
                             auto old_csr = csr_read(funct12);
-                            auto new_csr = regs.read(rs1);
+                            auto new_csr = m_regs.read(rs1);
 
-                            regs.write(rd, old_csr);
+                            m_regs.write(rd, old_csr);
                             csr_write(funct12, new_csr);
                         }
                         return ExecResult::Continue;
@@ -386,11 +392,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                         auto old_csr = csr_read(funct12);
 
                         if (rd != 0) {
-                            regs.write(rd, old_csr);
+                            m_regs.write(rd, old_csr);
                         }
 
                         if (rs1 != 0) {
-                            auto mask = regs.read(rs1);
+                            auto mask = m_regs.read(rs1);
                             auto new_csr = old_csr | mask;
                             csr_write(funct12, new_csr);
                         }
@@ -401,11 +407,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                         auto old_csr = csr_read(funct12);
 
                         if (rd != 0) {
-                            regs.write(rd, old_csr);
+                            m_regs.write(rd, old_csr);
                         }
 
                         if (rs1 != 0) {
-                            auto mask = regs.read(rs1);
+                            auto mask = m_regs.read(rs1);
                             auto new_csr = old_csr & ~mask;
                             csr_write(funct12, new_csr);
                         }
@@ -416,14 +422,14 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                             csr_write(funct12, static_cast<reg_t>(rs1));
                         } else {
                             auto old_csr = csr_read(funct12);
-                            regs.write(rd, old_csr);
+                            m_regs.write(rd, old_csr);
                             csr_write(funct12, static_cast<reg_t>(rs1));
                         }
                         return ExecResult::Continue;
                     }
                     case CSRRSI: {
                         auto old_csr = csr_read(funct12);
-                        regs.write(rd, old_csr);
+                        m_regs.write(rd, old_csr);
                         if (rs1 != 0) { // If immediate is 0, no write occurs
                             csr_write(funct12,
                                       old_csr | static_cast<reg_t>(rs1));
@@ -432,13 +438,15 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     }
                     case CSRRCI: {
                         auto old_csr = csr_read(funct12);
-                        regs.write(rd, old_csr);
+                        m_regs.write(rd, old_csr);
                         if (rs1 != 0) { // If immediate is 0, no write occurs
                             csr_write(funct12,
                                       old_csr & ~static_cast<reg_t>(rs1));
                         }
                         return ExecResult::Continue;
                     }
+                    default:
+                        return ExecResult::Fault;
                     }
                 }
                 case MISC_MEM: {
@@ -461,20 +469,22 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 switch (funct3) {
                 case (SB): {
                     uint32_t addrToWrite =
-                        regs.read(rs1) + static_cast<uint32_t>(imm);
-                    mem.write<8>(addrToWrite, pc, 0x000000FF & regs.read(rs2));
+                        m_regs.read(rs1) + static_cast<uint32_t>(imm);
+                    m_mem.write<8>(addrToWrite, m_pc,
+                                   0x000000FF & m_regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case (SH): {
                     uint32_t addrToWrite =
-                        regs.read(rs1) + static_cast<uint32_t>(imm);
-                    mem.write<16>(addrToWrite, pc, 0x0000FFFF & regs.read(rs2));
+                        m_regs.read(rs1) + static_cast<uint32_t>(imm);
+                    m_mem.write<16>(addrToWrite, m_pc,
+                                    0x0000FFFF & m_regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 case (SW): {
                     uint32_t addrToWrite =
-                        regs.read(rs1) + static_cast<uint32_t>(imm);
-                    mem.write<32>(addrToWrite, pc, regs.read(rs2));
+                        m_regs.read(rs1) + static_cast<uint32_t>(imm);
+                    m_mem.write<32>(addrToWrite, m_pc, m_regs.read(rs2));
                     return ExecResult::Continue;
                 }
                 default:
@@ -492,25 +502,27 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                 switch (funct3) {
                 case BEQ:
-                    take_branch = (regs.read(rs1) == regs.read(rs2));
+                    take_branch = (m_regs.read(rs1) == m_regs.read(rs2));
                     break;
                 case BNE:
-                    take_branch = (regs.read(rs1) != regs.read(rs2));
+                    take_branch = (m_regs.read(rs1) != m_regs.read(rs2));
                     break;
                 case BLT:
-                    take_branch = static_cast<int32_t>(regs.read(rs1)) <
-                                  static_cast<int32_t>(regs.read(rs2));
+                    take_branch = static_cast<int32_t>(m_regs.read(rs1)) <
+                                  static_cast<int32_t>(m_regs.read(rs2));
                     break;
                 case BGE:
-                    take_branch = static_cast<int32_t>(regs.read(rs1)) >=
-                                  static_cast<int32_t>(regs.read(rs2));
+                    take_branch = static_cast<int32_t>(m_regs.read(rs1)) >=
+                                  static_cast<int32_t>(m_regs.read(rs2));
                     break;
                 case BLTU:
-                    take_branch = (regs.read(rs1) < regs.read(rs2));
+                    take_branch = (m_regs.read(rs1) < m_regs.read(rs2));
                     break;
                 case BGEU:
-                    take_branch = (regs.read(rs1) >= regs.read(rs2));
+                    take_branch = (m_regs.read(rs1) >= m_regs.read(rs2));
                     break;
+                default:
+                    return ExecResult::Fault;
                 }
                 if (take_branch) {
                     pcInc = static_cast<uint32_t>(imm);
@@ -524,14 +536,14 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                 switch (opcode) {
 
                 case LUI: {
-                    regs.write(ins.get_rd(),
-                               static_cast<uint32_t>(ins.get_imm()));
+                    m_regs.write(ins.get_rd(),
+                                 static_cast<uint32_t>(ins.get_imm()));
                     return ExecResult::Continue;
                 }
 
                 case AUIPC: {
-                    regs.write(ins.get_rd(),
-                               pc + static_cast<uint32_t>(ins.get_imm()));
+                    m_regs.write(ins.get_rd(),
+                                 m_pc + static_cast<uint32_t>(ins.get_imm()));
                     return ExecResult::Continue;
                 }
                 default:
@@ -544,7 +556,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     trace(ins, this);
                 auto rd = ins.get_rd();
                 auto imm = ins.get_imm();
-                regs.write(rd, pc + 4);
+                m_regs.write(rd, m_pc + 4);
                 pcInc = static_cast<uint32_t>(imm);
 
                 return ExecResult::Continue;

@@ -3,14 +3,14 @@
 #include <iostream>
 #include <print>
 
-Memory::Memory(size_t size, Counters& _ctrs) : data(size, 0), ctrs(_ctrs) {}
+Memory::Memory(size_t size, Counters& _ctrs) : m_data(size, 0), ctrs(_ctrs) {}
 
 size_t Memory::translate(uint32_t address, uint32_t pc, uint32_t width) const {
     if (address < MEM_BASE) {
         fail_loudly(address, pc, width, "Address Below MEM_BASE");
     }
     size_t offset = address - MEM_BASE;
-    if (offset + width > data.size()) {
+    if (offset + width > m_data.size()) {
         fail_loudly(address, pc, width, "Address out of upper bounds");
     }
     return offset;
@@ -26,62 +26,62 @@ void Memory::fail_loudly(uint32_t address, uint32_t pc, uint32_t width,
 
 uint32_t Memory::fetch32(uint32_t address) {
     size_t offset = translate(address, address, 4);
-    return static_cast<uint32_t>(data[offset]) |
-           (static_cast<uint32_t>(data[offset + 1]) << 8) |
-           (static_cast<uint32_t>(data[offset + 2]) << 16) |
-           (static_cast<uint32_t>(data[offset + 3]) << 24);
+    return static_cast<uint32_t>(m_data[offset]) |
+           (static_cast<uint32_t>(m_data[offset + 1]) << 8) |
+           (static_cast<uint32_t>(m_data[offset + 2]) << 16) |
+           (static_cast<uint32_t>(m_data[offset + 3]) << 24);
 }
 
 uint8_t Memory::read8(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 1);
     ctrs.inc_loads();
-    return data[offset];
+    return m_data[offset];
 }
 
 uint16_t Memory::read16(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 2);
     ctrs.inc_loads();
     return static_cast<uint16_t>(
-        static_cast<uint32_t>(data[offset]) |
-        (static_cast<uint32_t>(data[offset + 1]) << 8));
+        static_cast<uint32_t>(m_data[offset]) |
+        (static_cast<uint32_t>(m_data[offset + 1]) << 8));
 }
 
 uint32_t Memory::read32(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 4);
     ctrs.inc_loads();
-    return static_cast<uint32_t>(data[offset]) |
-           (static_cast<uint32_t>(data[offset + 1]) << 8) |
-           (static_cast<uint32_t>(data[offset + 2]) << 16) |
-           (static_cast<uint32_t>(data[offset + 3]) << 24);
+    return static_cast<uint32_t>(m_data[offset]) |
+           (static_cast<uint32_t>(m_data[offset + 1]) << 8) |
+           (static_cast<uint32_t>(m_data[offset + 2]) << 16) |
+           (static_cast<uint32_t>(m_data[offset + 3]) << 24);
 }
 
 uint32_t CPU::csr_read(uint16_t num) const { return csrs[num]; }
 
 CPU::CPU(uint32_t _memSize)
-    : ctrs(), regs(), mem(_memSize, ctrs), pc(Memory::MEM_BASE),
-      result(ExecResult::Continue) {
+    : m_ctrs(), m_regs(), m_mem(_memSize, m_ctrs), m_pc(Memory::MEM_BASE),
+      m_result(ExecResult::Continue), m_privl(PrivL::M) {
 
     // Setting the value of register 2 aka sp (stack pointer)
     // Since the stack grows downwards, from a higher address to a lower address
 
-    regs.write(2, Memory::MEM_BASE + _memSize);
+    m_regs.write(2, Memory::MEM_BASE + _memSize);
 }
 
 void CPU::step() {
-    auto word = mem.fetch32(pc);
+    auto word = m_mem.fetch32(m_pc);
     Instruction ins = decode(word);
 
     uint32_t pcInc = 4;
-    result = execute_context(ins, pcInc);
-    if (result == ExecResult::Fault) {
+    m_result = execute_context(ins, pcInc);
+    if (m_result == ExecResult::Fault) {
         return;
     }
-    pc = pc + pcInc;
-    ctrs.inc_icount();
+    m_pc = m_pc + pcInc;
+    m_ctrs.inc_icount();
 }
 
 ExecResult CPU::run(uint64_t max_steps) {
-    for (auto s = 0ull; result == ExecResult::Continue; ++s) {
+    for (auto s = 0ull; m_result == ExecResult::Continue; ++s) {
         if (s >= max_steps) {
             std::println(stderr, "flagV: step limit {} reached", max_steps);
             dump_state(*this);
@@ -90,23 +90,23 @@ ExecResult CPU::run(uint64_t max_steps) {
         step();
     }
 
-    if (result == ExecResult::Fault) {
+    if (m_result == ExecResult::Fault) {
         std::println(stderr, "ExecResult is FAULT!");
         dump_state(*this);
     }
 
-    return result;
+    return m_result;
 }
 
-uint32_t CPU::reg(uint8_t i) const { return regs.read(i); }
+uint32_t CPU::reg(uint8_t i) const { return m_regs.read(i); }
 
 void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
-    pc = startAddress;
+    m_pc = startAddress;
     for (auto i = 0u; i < insVec.size(); i++) {
         uint32_t val = insVec[i];
-        size_t offset = mem.translate(startAddress + 4 * i, pc, 4);
+        size_t offset = m_mem.translate(startAddress + 4 * i, m_pc, 4);
         for (auto j = 0zu; j < 4; j++) {
-            mem.data[offset + j] = static_cast<uint8_t>(0x000000FF & val);
+            m_mem.m_data[offset + j] = static_cast<uint8_t>(0x000000FF & val);
             val >>= 8;
         }
     }
@@ -116,7 +116,7 @@ template <> void Memory::write<8>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 1);
     ctrs.inc_stores();
     for (auto i = 0zu; i < 1; i++) {
-        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
     }
 }
@@ -126,7 +126,7 @@ void Memory::write<16>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 2);
     ctrs.inc_stores();
     for (auto i = 0zu; i < 2; i++) {
-        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
     }
 }
@@ -136,7 +136,7 @@ void Memory::write<32>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 4);
     ctrs.inc_stores();
     for (auto i = 0zu; i < 4; i++) {
-        data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+        m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
     }
 }
@@ -159,12 +159,12 @@ void dump_state(const CPU& cpu) {
 
     std::println(stderr,
                  "{:<7}= 0x{:08x}  |  icount={:<5} loads={:<5} stores={:<5}",
-                 "pc", cpu.pc, cpu.ctrs.get_icount(), cpu.ctrs.get_loads(),
-                 cpu.ctrs.get_stores());
+                 "pc", cpu.m_pc, cpu.m_ctrs.get_icount(),
+                 cpu.m_ctrs.get_loads(), cpu.m_ctrs.get_stores());
 
     for (uint8_t i = 1; i < 32; i++) {
         std::println(stderr, "x{:<2}/{:<4} 0x{:08x}", i, ABI_NAMES[i],
-                     cpu.regs.read(i));
+                     cpu.m_regs.read(i));
     }
     std::print(stderr, "\n\n\n");
 }

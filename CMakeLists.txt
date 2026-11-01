@@ -42,14 +42,31 @@ if(MSVC)
  target_compile_options(MainApp PRIVATE /W4 /WX)
  # target_compile_options(ProcessObjdump PRIVATE /W4 /WX)
 else()
-  set(MY_PROJECT_WARNINGS
+set(MY_PROJECT_WARNINGS
     -Wall
     -Wextra
-    -Wshadow
     -Wpedantic
+
+    # Switch & Control Flow
+    -Wswitch-default
+    -Wimplicit-fallthrough
+
+    # Variables, Shadows & Conversions
+    -Wshadow
     -Wconversion
     -Wsign-conversion
+
+    # Casts & Memory Safety
     -Wold-style-cast
+    -Wcast-align
+    -Wnull-dereference
+
+    # OO Layouts & String Safety
+    -Wdelete-non-virtual-dtor
+    -Wnon-virtual-dtor
+    -Woverloaded-virtual
+    -Wformat=2
+    -Wmissing-declarations
 )
  target_compile_options(MainApp PRIVATE ${MY_PROJECT_WARNINGS})
  target_compile_options(DecoderLib PRIVATE ${MY_PROJECT_WARNINGS})

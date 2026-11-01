@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <vector>
 
+enum class PrivL : uint8_t { U = 0b00, S = 0b01, M = 0b11 };
+
 enum class ExecResult {
     Fault,
     Continue,
@@ -18,31 +20,31 @@ using reg_t = uint32_t;
 class Counters {
   private:
     /// @brief Total number of instructions executed by the CPU.
-    uint64_t icount{0};
+    uint64_t m_icount{0};
     /// @brief Total number of memory read operations.
-    uint64_t loads{0};
+    uint64_t m_loads{0};
     /// @brief Total number of memory write operations.
-    uint64_t stores{0};
+    uint64_t m_stores{0};
 
   public:
     // Counter getters
-    uint64_t get_icount() const { return icount; }
+    uint64_t get_icount() const { return m_icount; }
 
-    uint64_t get_loads() const { return loads; }
+    uint64_t get_loads() const { return m_loads; }
 
-    uint64_t get_stores() const { return stores; }
+    uint64_t get_stores() const { return m_stores; }
 
     // Counter mutators used by Memory primitives
-    void inc_icount() { icount++; }
+    void inc_icount() { m_icount++; }
 
-    void inc_loads() { loads++; }
+    void inc_loads() { m_loads++; }
 
-    void inc_stores() { stores++; }
+    void inc_stores() { m_stores++; }
 };
 
 class RegisterFile {
   private:
-    std::array<uint32_t, 32> regs{};
+    std::array<uint32_t, 32> m_regs{};
 
   public:
     explicit RegisterFile() = default;
@@ -52,18 +54,18 @@ class RegisterFile {
         if (index == 0) {
             return;
         }
-        regs[index] = value;
+        m_regs[index] = value;
     }
 
-    constexpr uint32_t read(uint8_t index) const { return regs[index]; }
+    constexpr uint32_t read(uint8_t index) const { return m_regs[index]; }
 
-    constexpr uint32_t operator[](uint8_t index) const { return regs[index]; }
+    constexpr uint32_t operator[](uint8_t index) const { return m_regs[index]; }
 };
 
 class Memory {
   private:
-    std::vector<uint8_t> data;
-    Counters& ctrs;
+    std::vector<uint8_t> m_data;
+    Counters& c_ctrs;
 
     void fail_loudly(uint32_t address, uint32_t pc, uint32_t width,
                      const char* reason) const;
@@ -136,9 +138,9 @@ class Memory {
     void write(uint32_t address, uint32_t pc, uint32_t val) {
         uint32_t width = sz / 8;
         size_t offset = translate(address, pc, width);
-        ctrs.inc_stores();
+        c_ctrs.inc_stores();
         for (size_t i = 0; i < width; i++) {
-            data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
+            m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
             val >>= 8;
         }
     }
@@ -202,11 +204,12 @@ template <> void Memory::write<32>(uint32_t address, uint32_t pc, uint32_t val);
 
 class CPU {
   private:
-    Counters ctrs;
-    RegisterFile regs;
-    Memory mem;
-    uint32_t pc;
-    ExecResult result;
+    Counters m_ctrs;
+    RegisterFile m_regs;
+    Memory m_mem;
+    uint32_t m_pc;
+    ExecResult m_result;
+    PrivL m_privl;
     std::array<uint32_t, 4096> csrs{};
 
     uint32_t csr_read(uint16_t num) const;
