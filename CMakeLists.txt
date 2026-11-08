@@ -22,7 +22,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-add_library(DecoderLib STATIC src/decode.cpp src/system.cpp src/cpu_exec.cpp)
+add_library(DecoderLib STATIC src/decode.cpp src/system.cpp src/cpu_exec.cpp src/csr.cpp)
+
 
 target_include_directories(DecoderLib PUBLIC src/)
 

@@ -6,7 +6,6 @@
 #include "system.h"
 #include "trace.h"
 #include <iostream>
-#include <print>
 
 ///@brief Anonymous namespace for enums to identify instructions from their
 /// fields
@@ -350,24 +349,15 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                     case ECALL_EBREAK: {
                         if (funct12 == 0x302) {
-                            pcInc = csr_read(0x341) - m_pc;
+                            pcInc = m_csrfile.read(0x341) - m_pc;
                             return ExecResult::Continue;
                         }
                         if (funct12 == 0) {
                             // ecall
-                            auto a7 = m_regs.read(17);
-                            switch (a7) {
-                            case 1: {
-                                std::println("{}", static_cast<int32_t>(
-                                                       m_regs.read(10)));
-                                return ExecResult::Continue;
-                            }
-                            case 93: {
-                                return ExecResult::Halt;
-                            }
-                            default:
-                                return ExecResult::Fault;
-                            }
+                            [[maybe_unused]] auto a7 = m_regs.read(17);
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::EnvCallFromU),
+                                       .mtval = 0};
                         } else if (funct12 == 1) {
                             // ebreak
                             return ExecResult::Halt;
@@ -376,12 +366,19 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                         }
                     }
                     case CSRRW: {
+                        // Check CSR access
+                        if (!m_csrfile.isAccessValid(funct12, m_priv_lvl, true))
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::IllegalInstruction),
+                                       .mtval = 0};
+
+                        // It is a write-only operation
                         if (rd == 0) {
                             csr_write(funct12, m_regs.read(rs1));
                         } else {
 
-                            auto old_csr = csr_read(funct12);
-                            auto new_csr = m_regs.read(rs1);
+                            reg_t old_csr = m_csrfile.read(funct12);
+                            reg_t new_csr = m_regs.read(rs1);
 
                             m_regs.write(rd, old_csr);
                             csr_write(funct12, new_csr);
@@ -389,60 +386,111 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                         return ExecResult::Continue;
                     }
                     case CSRRS: {
-                        auto old_csr = csr_read(funct12);
+                        // cssrs: rd = Old CSR ; CSR = Old CSR | val.rs1
+                        bool willWriteToCsr = (rs1 != 0);
 
-                        if (rd != 0) {
-                            m_regs.write(rd, old_csr);
+                        // Check CSR access
+                        if (!m_csrfile.isAccessValid(funct12, m_priv_lvl,
+                                                     willWriteToCsr))
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::IllegalInstruction),
+                                       .mtval = 0};
+
+                        reg_t mask = m_regs.read(rs1);
+                        reg_t old_csr = m_csrfile.read(funct12);
+
+                        // It is a read-only operation
+                        if (willWriteToCsr) {
+                            csr_write(funct12, old_csr | mask);
                         }
 
-                        if (rs1 != 0) {
-                            auto mask = m_regs.read(rs1);
-                            auto new_csr = old_csr | mask;
-                            csr_write(funct12, new_csr);
-                        }
+                        m_regs.write(rd, old_csr);
                         return ExecResult::Continue;
                     }
 
                     case CSRRC: {
-                        auto old_csr = csr_read(funct12);
 
-                        if (rd != 0) {
-                            m_regs.write(rd, old_csr);
+                        // cssrc: rd = Old CSR ; CSR = Old CSR & ~val.rs1
+                        bool willWriteToCsr = (rs1 != 0);
+
+                        // Check CSR access
+                        if (!m_csrfile.isAccessValid(funct12, m_priv_lvl,
+                                                     willWriteToCsr))
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::IllegalInstruction),
+                                       .mtval = 0};
+
+                        reg_t mask = m_regs.read(rs1);
+                        reg_t old_csr = m_csrfile.read(funct12);
+
+                        // It is a read-only operation
+                        if (willWriteToCsr) {
+                            csr_write(funct12, old_csr & ~mask);
                         }
 
-                        if (rs1 != 0) {
-                            auto mask = m_regs.read(rs1);
-                            auto new_csr = old_csr & ~mask;
-                            csr_write(funct12, new_csr);
-                        }
+                        m_regs.write(rd, old_csr);
                         return ExecResult::Continue;
                     }
                     case CSRRWI: {
+                        // Check CSR access
+                        if (!m_csrfile.isAccessValid(funct12, m_priv_lvl, true))
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::IllegalInstruction),
+                                       .mtval = 0};
+
                         if (rd == 0) {
                             csr_write(funct12, static_cast<reg_t>(rs1));
                         } else {
-                            auto old_csr = csr_read(funct12);
+                            auto old_csr = m_csrfile.read(funct12);
                             m_regs.write(rd, old_csr);
                             csr_write(funct12, static_cast<reg_t>(rs1));
                         }
                         return ExecResult::Continue;
                     }
                     case CSRRSI: {
-                        auto old_csr = csr_read(funct12);
-                        m_regs.write(rd, old_csr);
-                        if (rs1 != 0) { // If immediate is 0, no write occurs
-                            csr_write(funct12,
-                                      old_csr | static_cast<reg_t>(rs1));
+
+                        // cssrsi: rd = Old CSR ; CSR = Old CSR & ~rs1
+                        bool willWriteToCsr = (rs1 != 0);
+
+                        // Check CSR access
+                        if (!m_csrfile.isAccessValid(funct12, m_priv_lvl,
+                                                     willWriteToCsr))
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::IllegalInstruction),
+                                       .mtval = 0};
+
+                        reg_t mask = rs1;
+                        reg_t old_csr = m_csrfile.read(funct12);
+
+                        // It is a read-only operation
+                        if (willWriteToCsr) {
+                            csr_write(funct12, old_csr | mask);
                         }
+
+                        m_regs.write(rd, old_csr);
                         return ExecResult::Continue;
                     }
                     case CSRRCI: {
-                        auto old_csr = csr_read(funct12);
-                        m_regs.write(rd, old_csr);
-                        if (rs1 != 0) { // If immediate is 0, no write occurs
-                            csr_write(funct12,
-                                      old_csr & ~static_cast<reg_t>(rs1));
+
+                        // cssrci: rd = Old CSR ; CSR = Old CSR & ~rs1
+                        bool willWriteToCsr = (rs1 != 0);
+
+                        // Check CSR access
+                        if (!m_csrfile.isAccessValid(funct12, m_priv_lvl,
+                                                     willWriteToCsr))
+                            throw Trap{.mcause = static_cast<reg_t>(
+                                           Exception::IllegalInstruction),
+                                       .mtval = 0};
+
+                        reg_t mask = rs1;
+                        reg_t old_csr = m_csrfile.read(funct12);
+
+                        // It is a read-only operation
+                        if (willWriteToCsr) {
+                            csr_write(funct12, old_csr & ~mask);
                         }
+
+                        m_regs.write(rd, old_csr);
                         return ExecResult::Continue;
                     }
                     default:
@@ -563,8 +611,8 @@ ExecResult CPU::execute_context(const Instruction& instruction,
             },
             [&](const auto&) -> ExecResult {
                 std::cout << "HORRID ERROR: No Instruction Type Match inside "
-                             "Execute Context\n"
-                          << std::endl;
+                             "Execute Context"
+                          << '\n';
                 return ExecResult::Fault;
             }}
 

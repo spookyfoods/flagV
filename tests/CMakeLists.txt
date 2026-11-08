@@ -9,6 +9,7 @@ FetchContent_MakeAvailable(Catch2)
 add_executable(unit_tests
     test_opcodes.cpp
     test_decode.cpp
+    test_csr.cpp
 )
 target_link_libraries(unit_tests PRIVATE DecoderLib Catch2::Catch2WithMain)
 

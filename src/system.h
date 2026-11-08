@@ -1,21 +1,18 @@
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
+#include "csr.h"
 #include "decode.h"
 #include <array>
 #include <concepts>
 #include <cstdint>
 #include <vector>
 
-enum class PrivL : uint8_t { U = 0b00, S = 0b01, M = 0b11 };
-
 enum class ExecResult {
     Fault,
     Continue,
     Halt,
 };
-
-using reg_t = uint32_t;
 
 class Counters {
   private:
@@ -207,9 +204,12 @@ class CPU {
     Counters m_ctrs;
     RegisterFile m_regs;
     Memory m_mem;
-    uint32_t m_pc;
+    reg_t m_pc;
     ExecResult m_result;
-    PrivL m_privl;
+    PrivLvl m_priv_lvl;
+    CsrFile m_csrfile;
+
+    // To be removed
     std::array<uint32_t, 4096> csrs{};
 
     uint32_t csr_read(uint16_t num) const;
@@ -241,6 +241,7 @@ class CPU {
     void load(std::vector<uint32_t> insVec, uint32_t startAddress);
 
     ExecResult execute_context(const Instruction& ins, uint32_t& pcInc);
+    void take_trap_exception(const Trap& t) noexcept;
 
     friend void dump_state(const CPU& cpu);
     friend struct CpuProbe;

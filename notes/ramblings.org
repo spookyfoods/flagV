@@ -1,0 +1,14 @@
+#+title: Ramblings
+
+* Ways in which we can trap into the kernel
+** ecall is used for synchronous exceptions, syscalls aka controlled traps
+** 'Illegal Instruction' - Bad Encoding, CSR privilege violation, mret in User Mode
+* Raising a trap
+** A trap will be raised with some additional information, providing a value for the mcause and mtval
+** Starting the trap process
+*** Swap mscratch(which contains the address to the start of the trapframe) and sp(x2)
+*** mscratch now contains the value of sp(x2)
+*** Save all register x1 through x31(apart from x2) onto the trapframe
+*** Save the mscratch value(sp) onto the trapframe as well
+*** Save mepc onto the trapframe
+*** Change sp to the point just beyond all these saves

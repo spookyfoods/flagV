@@ -1,9 +1,10 @@
 #include "system.h"
+#include "csr.h"
 #include <cstdlib>
 #include <iostream>
 #include <print>
 
-Memory::Memory(size_t size, Counters& _ctrs) : m_data(size, 0), ctrs(_ctrs) {}
+Memory::Memory(size_t size, Counters& _ctrs) : m_data(size, 0), c_ctrs(_ctrs) {}
 
 size_t Memory::translate(uint32_t address, uint32_t pc, uint32_t width) const {
     if (address < MEM_BASE) {
@@ -34,13 +35,13 @@ uint32_t Memory::fetch32(uint32_t address) {
 
 uint8_t Memory::read8(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 1);
-    ctrs.inc_loads();
+    c_ctrs.inc_loads();
     return m_data[offset];
 }
 
 uint16_t Memory::read16(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 2);
-    ctrs.inc_loads();
+    c_ctrs.inc_loads();
     return static_cast<uint16_t>(
         static_cast<uint32_t>(m_data[offset]) |
         (static_cast<uint32_t>(m_data[offset + 1]) << 8));
@@ -48,7 +49,7 @@ uint16_t Memory::read16(uint32_t address, uint32_t pc) {
 
 uint32_t Memory::read32(uint32_t address, uint32_t pc) {
     size_t offset = translate(address, pc, 4);
-    ctrs.inc_loads();
+    c_ctrs.inc_loads();
     return static_cast<uint32_t>(m_data[offset]) |
            (static_cast<uint32_t>(m_data[offset + 1]) << 8) |
            (static_cast<uint32_t>(m_data[offset + 2]) << 16) |
@@ -59,7 +60,7 @@ uint32_t CPU::csr_read(uint16_t num) const { return csrs[num]; }
 
 CPU::CPU(uint32_t _memSize)
     : m_ctrs(), m_regs(), m_mem(_memSize, m_ctrs), m_pc(Memory::MEM_BASE),
-      m_result(ExecResult::Continue), m_privl(PrivL::M) {
+      m_result(ExecResult::Continue), m_priv_lvl(PrivLvl::M) {
 
     // Setting the value of register 2 aka sp (stack pointer)
     // Since the stack grows downwards, from a higher address to a lower address
@@ -68,16 +69,22 @@ CPU::CPU(uint32_t _memSize)
 }
 
 void CPU::step() {
-    auto word = m_mem.fetch32(m_pc);
-    Instruction ins = decode(word);
-
     uint32_t pcInc = 4;
-    m_result = execute_context(ins, pcInc);
+    try {
+        auto word = m_mem.fetch32(m_pc);
+        Instruction ins = decode(word);
+
+        m_result = execute_context(ins, pcInc);
+    } catch (const Trap& t) {
+        take_trap_exception(t);
+        m_result = ExecResult::Continue;
+    }
     if (m_result == ExecResult::Fault) {
         return;
     }
     m_pc = m_pc + pcInc;
     m_ctrs.inc_icount();
+    return;
 }
 
 ExecResult CPU::run(uint64_t max_steps) {
@@ -112,9 +119,36 @@ void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
     }
 }
 
+void CPU::take_trap_exception(const Trap& t) noexcept {
+
+    m_csrfile.write(CSR::MEPC, m_pc);
+    m_csrfile.write(CSR::MCAUSE, t.mcause);
+    m_csrfile.write(CSR::MTVAL, t.mtval);
+
+    std::bitset<32> old_mstatus = m_csrfile.read(CSR::MSTATUS);
+
+    // mstatus.MPIE <- mstatus.MIE
+    old_mstatus.set(7, old_mstatus[3]);
+
+    // mstatus.MIE <- 0
+    old_mstatus.set(3, 0);
+
+    // mstatus.MPP <- previousMode
+    // Currently only setting U(=00)
+    old_mstatus.set(11, 0);
+    old_mstatus.set(12, 0);
+
+    // set hart's privilege level to Machine Mode
+    m_priv_lvl = PrivLvl::M;
+
+    // pc <- mtvec.BASE
+    // Limiting to only DIRECT mode
+    m_pc = m_csrfile.read(MTVEC) & 0b00;
+}
+
 template <> void Memory::write<8>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 1);
-    ctrs.inc_stores();
+    c_ctrs.inc_stores();
     for (auto i = 0zu; i < 1; i++) {
         m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
@@ -124,7 +158,7 @@ template <> void Memory::write<8>(uint32_t address, uint32_t pc, uint32_t val) {
 template <>
 void Memory::write<16>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 2);
-    ctrs.inc_stores();
+    c_ctrs.inc_stores();
     for (auto i = 0zu; i < 2; i++) {
         m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;
@@ -134,7 +168,7 @@ void Memory::write<16>(uint32_t address, uint32_t pc, uint32_t val) {
 template <>
 void Memory::write<32>(uint32_t address, uint32_t pc, uint32_t val) {
     size_t offset = translate(address, pc, 4);
-    ctrs.inc_stores();
+    c_ctrs.inc_stores();
     for (auto i = 0zu; i < 4; i++) {
         m_data[offset + i] = static_cast<uint8_t>(0x000000FF & val);
         val >>= 8;

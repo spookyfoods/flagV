@@ -1,5 +1,6 @@
 #include "decode.h"
 #include "config.h"
+#include "csr.h"
 #include <iostream>
 #include <stdexcept>
 
@@ -13,9 +14,13 @@ auto decode(uint32_t raw_inst) -> Instruction {
         return RType{raw_inst};
 
     case 0x13:
+        [[fallthrough]];
     case 0x03:
+        [[fallthrough]];
     case 0x67:
+        [[fallthrough]];
     case 0x73:
+        [[fallthrough]];
     case 0x0F:
         return IType{raw_inst};
 
@@ -26,6 +31,7 @@ auto decode(uint32_t raw_inst) -> Instruction {
         return BType{raw_inst};
 
     case 0x37:
+        [[fallthrough]];
     case 0x17:
         return UType{raw_inst};
 
@@ -33,7 +39,7 @@ auto decode(uint32_t raw_inst) -> Instruction {
         return JType{raw_inst};
 
     default:
-        throw std::runtime_error("Invalid Opcode");
+        throw Trap{.mcause = 2, .mtval = 0};
     }
 }
 

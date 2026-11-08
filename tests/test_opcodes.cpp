@@ -5,15 +5,15 @@
 
 // Requires `friend struct CpuProbe;` inside CPU.
 struct CpuProbe {
-    static RegisterFile& regs(CPU& c) noexcept { return c.regs; }
+    static RegisterFile& regs(CPU& c) noexcept { return c.m_regs; }
 
-    static const RegisterFile& regs(const CPU& c) noexcept { return c.regs; }
+    static const RegisterFile& regs(const CPU& c) noexcept { return c.m_regs; }
 
-    static uint32_t& pc(CPU& c) noexcept { return c.pc; }
+    static uint32_t& pc(CPU& c) noexcept { return c.m_pc; }
 
-    static ExecResult& result(CPU& c) noexcept { return c.result; }
+    static ExecResult& result(CPU& c) noexcept { return c.m_result; }
 
-    static Memory& mem(CPU& c) noexcept { return c.mem; }
+    static Memory& mem(CPU& c) noexcept { return c.m_mem; }
 };
 
 namespace {
