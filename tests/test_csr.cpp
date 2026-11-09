@@ -16,3 +16,10 @@ TEST_CASE("CSR Access") {
         REQUIRE(csr.isAccessValid(0xF14, PrivLvl::U, true) == true);
     }
 }
+
+// TEST_CASE("Writes Persist") {
+
+//     SECTION("Writing to CSRs and looping back") {
+
+//     }
+// }

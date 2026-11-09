@@ -348,20 +348,61 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                     switch (funct3) {
 
                     case ECALL_EBREAK: {
+
+                        // mret
                         if (funct12 == 0x302) {
-                            pcInc = m_csrfile.read(0x341) - m_pc;
+                            if (!m_csrfile.isAccessValid(funct12, m_priv_lvl,
+                                                         true))
+                                throw Trap{.mcause = static_cast<reg_t>(
+                                               Exception::IllegalInstruction),
+                                           .mtval = 0};
+                            /* Read */
+                            std::bitset<32> old_mstatus =
+                                m_csrfile.read(CSR::MSTATUS);
+
+                            // Set hart's privilege level to MSTATUS.MPP
+                            PrivLvl mpp_read = static_cast<PrivLvl>(
+                                old_mstatus[12] << 1 | old_mstatus[11]);
+
+                            /* Modify  */
+                            // mstatus.MIE <- mstatus.MPIE
+                            old_mstatus.set(3, old_mstatus[7]);
+
+                            // mstatus.MPIE <- 1
+                            old_mstatus.set(7, 1);
+
+                            // mstatus.MPP <- Least Privilege
+                            // Currently only setting U(=00)
+                            old_mstatus.set(11, 0);
+                            old_mstatus.set(12, 0);
+
+                            // mstatus.MPRV <- 0
+                            old_mstatus.set(17, 0);
+
+                            /* Write */
+                            m_csrfile.write(
+                                CSR::MSTATUS,
+                                static_cast<reg_t>(old_mstatus.to_ulong()));
+                            m_priv_lvl = mpp_read;
+                            m_pc = m_csrfile.read(CSR::MEPC);
+
                             return ExecResult::Continue;
                         }
-                        if (funct12 == 0) {
-                            // ecall
+
+                        // ecall
+                        else if (funct12 == 0) {
                             [[maybe_unused]] auto a7 = m_regs.read(17);
                             throw Trap{.mcause = static_cast<reg_t>(
                                            Exception::EnvCallFromU),
                                        .mtval = 0};
-                        } else if (funct12 == 1) {
-                            // ebreak
+                        }
+
+                        // ebreak
+                        else if (funct12 == 1) {
                             return ExecResult::Halt;
-                        } else {
+                        }
+
+                        else {
                             return ExecResult::Fault;
                         }
                     }
@@ -374,14 +415,14 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                         // It is a write-only operation
                         if (rd == 0) {
-                            csr_write(funct12, m_regs.read(rs1));
+                            m_csrfile.write(funct12, m_regs.read(rs1));
                         } else {
 
                             reg_t old_csr = m_csrfile.read(funct12);
                             reg_t new_csr = m_regs.read(rs1);
 
                             m_regs.write(rd, old_csr);
-                            csr_write(funct12, new_csr);
+                            m_csrfile.write(funct12, new_csr);
                         }
                         return ExecResult::Continue;
                     }
@@ -401,7 +442,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                         // It is a read-only operation
                         if (willWriteToCsr) {
-                            csr_write(funct12, old_csr | mask);
+                            m_csrfile.write(funct12, old_csr | mask);
                         }
 
                         m_regs.write(rd, old_csr);
@@ -425,7 +466,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                         // It is a read-only operation
                         if (willWriteToCsr) {
-                            csr_write(funct12, old_csr & ~mask);
+                            m_csrfile.write(funct12, old_csr & ~mask);
                         }
 
                         m_regs.write(rd, old_csr);
@@ -439,11 +480,11 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                                        .mtval = 0};
 
                         if (rd == 0) {
-                            csr_write(funct12, static_cast<reg_t>(rs1));
+                            m_csrfile.write(funct12, static_cast<reg_t>(rs1));
                         } else {
                             auto old_csr = m_csrfile.read(funct12);
                             m_regs.write(rd, old_csr);
-                            csr_write(funct12, static_cast<reg_t>(rs1));
+                            m_csrfile.write(funct12, static_cast<reg_t>(rs1));
                         }
                         return ExecResult::Continue;
                     }
@@ -464,7 +505,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                         // It is a read-only operation
                         if (willWriteToCsr) {
-                            csr_write(funct12, old_csr | mask);
+                            m_csrfile.write(funct12, old_csr | mask);
                         }
 
                         m_regs.write(rd, old_csr);
@@ -487,7 +528,7 @@ ExecResult CPU::execute_context(const Instruction& instruction,
 
                         // It is a read-only operation
                         if (willWriteToCsr) {
-                            csr_write(funct12, old_csr & ~mask);
+                            m_csrfile.write(funct12, old_csr & ~mask);
                         }
 
                         m_regs.write(rd, old_csr);

@@ -70,6 +70,12 @@ class Memory {
   public:
     static constexpr uint32_t MEM_BASE = 0x80000000;
 
+    /**
+     * @brief Translates Memory Address for the Memory Vector Container
+     * @param[in] address The Address to be translated
+     * @param[in] pc Address shown at PC
+     * @param[in] width Number of Bytes
+     */
     size_t translate(uint32_t address, uint32_t pc, uint32_t width) const;
     explicit Memory(size_t size, Counters& _ctrs);
     Memory(const Memory&) = delete;
@@ -209,19 +215,12 @@ class CPU {
     PrivLvl m_priv_lvl;
     CsrFile m_csrfile;
 
-    // To be removed
-    std::array<uint32_t, 4096> csrs{};
-
-    uint32_t csr_read(uint16_t num) const;
-
-    template <std::same_as<reg_t> T> void csr_write(uint16_t num, T value) {
-        csrs[num] = value;
-    }
-
   public:
     CPU(uint32_t _memSize);
     void step();
     ExecResult run(uint64_t max_steps);
+
+    uint32_t fetch(uint32_t addr);
 
     /**
      *  @brief Returns the value of a specific register

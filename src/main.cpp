@@ -3,7 +3,7 @@
 
 int main(int argc, char* argv[]) {
     // Default to 'fact.bin' if no file is provided as an argument
-    std::string binary_path = (argc > 1) ? argv[1] : "fact.bin";
+    // std::string binary_path = (argc > 1) ? argv[1] : "fact.bin";
 
     try {
         CPU cpu(1 << 24);

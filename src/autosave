@@ -1,0 +1,531 @@
+;; -*- mode: emacs-lisp; eval: (progn (pp-buffer) (indent-buffer)) -*-
+((def-persp nil nil
+            (def-wconf
+             (((min-height . 4) (min-width . 10) (min-height-ignore . 1)
+               (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2)
+               (min-pixel-height . 80) (min-pixel-width . 90)
+               (min-pixel-height-ignore . 20) (min-pixel-width-ignore . 36)
+               (min-pixel-height-safe . 20) (min-pixel-width-safe . 18))
+              leaf (last . t) (pixel-width . 180) (pixel-height . 80)
+              (total-width . 20) (total-height . 4) (normal-height . 1.0)
+              (normal-width . 1.0)
+              (buffer " *corfu-popupinfo*" (selected . t) (hscroll . 0)
+                      (fringes 0 0 t nil) (margins 1 . 1)
+                      (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0)
+                      (dedicated . t) (point . 1) (start . 1))))
+            (def-params ((last-project-root . "/Users/spookymac/dev/flagV/"))) t
+            nil t)
+ (def-persp "main"
+            ((def-buffer "dayByDay.org"
+                         "/Users/spookymac/dev/humbug/notes/dayByDay.org"
+                         org-mode))
+            (def-wconf
+             (((min-height . 4) (min-width . 10) (min-height-ignore . 3)
+               (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2)
+               (min-pixel-height . 80) (min-pixel-width . 90)
+               (min-pixel-height-ignore . 60) (min-pixel-width-ignore . 36)
+               (min-pixel-height-safe . 20) (min-pixel-width-safe . 18))
+              leaf (pixel-width . 1276) (pixel-height . 744) (total-width . 142)
+              (total-height . 37) (normal-height . 1.0) (normal-width . 1.0)
+              (parameters
+               (better-jumper-struct
+                . #s(better-jumper-jump-list-struct
+                     (38 100
+                         . [("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             223755 "775b1x")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             226434 "i67fbj")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             227354 "w0zc7z")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             229147 "aj1kzk")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             230341 "kabpiw")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             230592 "5t39sc")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             232300 "083prh")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             239584 "6o0dsy")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             250737 "0jc3k8")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             252217 "b425a9")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             255673 "m69l7f")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             256091 "0g9tdw")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             273824 "p2t02s")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             278108 "o43zog")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             295067 "h438mv")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             305063 "w59min")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             295059 "h8mn1v")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             278100 "euktb5")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             273816 "f51m5x")
+                            ("/Users/spookymac/dev/humbug/experiments/main.c"
+                             1207 "d3q7f8")
+                            ("/Users/spookymac/dev/humbug/experiments/main.c" 25
+                             "im9s2y")
+                            ("/Library/Developer/CommandLineTools/SDKs/MacOSX27.2.sdk/usr/include/sys/_endian.h"
+                             5873 "596mu5")
+                            ("/Users/spookymac/dev/humbug/experiments/main.c" 25
+                             "auyddm")
+                            ("/Users/spookymac/dev/humbug/experiments/main.c"
+                             158 "g2aqgl")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             64568 "amnf8f")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             73372 "f4nb6r")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             79554 "a8vr3e")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             103353 "fiumqh")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             104647 "vxntsv")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             110865 "d5n15s")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             104647 "ybuqw5")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             110865 "2buyzu")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             110931 "k6wg2c")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             113315 "zj5p4p")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             8437 "0dyowa")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             28244 "64dh94")
+                            ("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                             55649 "twnvig")
+                            ("/Library/Developer/CommandLineTools/SDKs/MacOSX27.2.sdk/usr/include/sys/_endian.h"
+                             5873 "s18tqf")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             26621 "fsv1iq")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             27460 "yxmppi")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             213394 "xi2vci")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             215720 "3ikgoz")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             216482 "2nd05n")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             215724 "p1z4b7")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             216482 "n0dp79")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             217363 "7eiyfd")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             217367 "iviedc")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             218029 "uq9x8p")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             218977 "1iktu7")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             218981 "39wi4o")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             221861 "y8v7f1")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             221865 "ks0lel")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             223755 "zxtonx")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             223990 "h3n4jb")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             226434 "ulirzm")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             227358 "8o61f5")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             229147 "p5qy89")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             229151 "reyr4t")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             230341 "65hclq")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             230345 "hje2lo")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             230592 "f4kctg")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             230596 "fq3h2q")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             232300 "n0rb74")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             232304 "dq7h15")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             239584 "n3h938")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             239588 "fn2ipj")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             250737 "jendn9")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             250741 "on218y")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             252217 "cttzmf")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             252221 "419ncd")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             255673 "qwtu71")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             255677 "k3j8mv")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             256091 "k1msys")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             256095 "jxyux2")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             273824 "dyv4b9")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             278108 "ytyoen")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             278112 "v5a8fn")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             295067 "oq3218")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             295071 "uds6sw")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             305063 "n2syar")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             305067 "04eu34")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             310335 "1cz0a7")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             310339 "44f9lv")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             21879 "o0nb72")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             21888 "buka23")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             22729 "9fazvt")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             23363 "modvfz")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             24871 "vyczsm")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             26617 "jtzptr")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             27460 "idts3d")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             213394 "r2xhwy")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             215720 "0cmo1k")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             213386 "npk6ei")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             213398 "pwat88")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             215720 "f4cp24")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             216482 "4vk777")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             217363 "00j812")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             218029 "i75ysn")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             218977 "au2j5b")
+                            ("/Users/spookymac/Downloads/application-layer-and-network-programming.org"
+                             221861 "f3s3m2")])
+                     -1)))
+              (buffer "dayByDay.org" (selected . t) (hscroll . 0)
+                      (fringes 8 8 t nil) (margins nil)
+                      (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0)
+                      (dedicated) (point . 3778) (start . 2909))
+              (prev-buffers ("*doom*" 1 1507) ("*ghostel*" 1 346))))
+            (def-params ((last-project-root . "/Users/spookymac/dev/humbug/")))
+            nil nil nil)
+ (def-persp "#1"
+            ((def-buffer "variant"
+                         "/Library/Developer/CommandLineTools/SDKs/MacOSX27.2.sdk/usr/include/c++/v1/variant"
+                         c++-ts-mode)
+             (def-buffer "invoke.h"
+                         "/Library/Developer/CommandLineTools/SDKs/MacOSX27.2.sdk/usr/include/c++/v1/__type_traits/invoke.h"
+                         c++-ts-mode)
+             (def-buffer "cpu_exec.cpp"
+                         "/Users/spookymac/dev/flagV/src/cpu_exec.cpp"
+                         c++-ts-mode)
+             (def-buffer "system.h" "/Users/spookymac/dev/flagV/src/system.h"
+                         c++-ts-mode)
+             (def-buffer "decode.h" "/Users/spookymac/dev/flagV/src/decode.h"
+                         c++-ts-mode)
+             (def-buffer "unreachable.h"
+                         "/Library/Developer/CommandLineTools/SDKs/MacOSX27.2.sdk/usr/include/c++/v1/__utility/unreachable.h"
+                         c-ts-mode)
+             (def-buffer "config.h" "/Users/spookymac/dev/flagV/src/config.h"
+                         c++-ts-mode)
+             (def-buffer "test_csr.cpp"
+                         "/Users/spookymac/dev/flagV/tests/test_csr.cpp"
+                         c++-ts-mode)
+             (def-buffer "lde-riscv-privileged.org"
+                         "/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                         org-mode)
+             (def-buffer "decode.cpp"
+                         "/Users/spookymac/dev/flagV/src/decode.cpp" c++-ts-mode)
+             (def-buffer "system.cpp"
+                         "/Users/spookymac/dev/flagV/src/system.cpp" c++-ts-mode)
+             (def-buffer "main.cpp" "/Users/spookymac/dev/flagV/src/main.cpp"
+                         c++-ts-mode)
+             (def-buffer "ramblings.org"
+                         "/Users/spookymac/dev/flagV/notes/ramblings.org"
+                         org-mode))
+            (def-wconf
+             (((min-height . 4) (min-width . 10) (min-height-ignore . 3)
+               (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2)
+               (min-pixel-height . 80) (min-pixel-width . 90)
+               (min-pixel-height-ignore . 60) (min-pixel-width-ignore . 36)
+               (min-pixel-height-safe . 20) (min-pixel-width-safe . 18))
+              leaf (pixel-width . 1276) (pixel-height . 744) (total-width . 142)
+              (total-height . 37) (normal-height . 1.0) (normal-width . 1.0)
+              (parameters
+               (better-jumper-struct
+                . #s(better-jumper-jump-list-struct
+                     (69 100
+                         . [("/Users/spookymac/dev/flagV/src/csr.h" 2075
+                             "r3lsev")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4156
+                             "5pl40e")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4090
+                             "l57t2p")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "6w3s0e")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2065
+                             "beypoa")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "lo2uzo")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2088
+                             "p4zocp")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "7umy07")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2088
+                             "osh1g1")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "8zfpmv")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2088
+                             "19i78n")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "13ei0d")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2088
+                             "jztkst")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "mmcqmo")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2088
+                             "nnzfsv")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "exe8qi")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2229
+                             "xe7x44")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "h012m0")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "bp5omr")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "x390ob")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "sq1jyu")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "trih1g")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "v0g9ga")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "5p82va")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "me50wz")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "8cwvn0")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "4iztmt")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "njggnp")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "kmufsh")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4082
+                             "9mpmhy")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "m9rpgf")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4018
+                             "nv2cep")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2176
+                             "8gxflq")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4018
+                             "nf94cc")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2030
+                             "jzfhys")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12943
+                             "qedkhb")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4433
+                             "goqw1z")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12943
+                             "a7pbqi")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4258
+                             "8qyena")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12943
+                             "hs10x7")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4258
+                             "0zzs2w")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13173
+                             "92jsel")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4258
+                             "9ehnuq")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4264
+                             "t6h1cm")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4281
+                             "psfeh2")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4288
+                             "9a00us")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4258
+                             "9056lz")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4368
+                             "r37f22")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13168
+                             "yz197j")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13251
+                             "dixhoz")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12334
+                             "p54f0c")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4368
+                             "2s0f49")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12334
+                             "cm4wds")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4368
+                             "ewwvub")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12334
+                             "njxw7l")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4368
+                             "wzkyfb")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12334
+                             "fjiu8b")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4368
+                             "a55hoe")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12941
+                             "tugeyz")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4201
+                             "9k90te")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12945
+                             "wgp02g")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4201
+                             "pzf4y0")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13008
+                             "sm9hx5")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13405
+                             "cdauwz")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4373
+                             "bcil4c")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13656
+                             "vskmnm")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4373
+                             "ymxfdt")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13656
+                             "eny5bh")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 13742
+                             "ixymbm")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4167
+                             "nu0x8a")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12892
+                             "291ky7")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4167
+                             "z6m1i4")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12892
+                             "c2cpc1")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4102
+                             "ek3ncp")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12892
+                             "ucwxdy")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4102
+                             "ysl7s5")
+                            ("/Users/spookymac/dev/flagV/src/cpu_exec.cpp" 12892
+                             "o7flos")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4102
+                             "qg8llg")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4026
+                             "63po4z")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4610
+                             "j5gm0r")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4042
+                             "j8w828")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4090
+                             "ga7d6w")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 180 "2a02xc")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 363 "bvxz41")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 174 "1lwkg6")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4090
+                             "yshna5")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2232
+                             "yjsrqx")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2169
+                             "9tff3q")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2183
+                             "k2mhvp")
+                            ("/Users/spookymac/dev/flagV/src/csr.cpp" 351
+                             "x6wvli")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 192 "qhhkio")
+                            ("/Users/spookymac/dev/flagV/src/csr.cpp" 353
+                             "4aolnl")
+                            ("/Users/spookymac/dev/flagV/src/csr.cpp" 354
+                             "j548ai")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 192 "xt4l77")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 582 "q24l6l")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2031
+                             "klg1gj")
+                            ("/Users/spookymac/dev/flagV/src/csr.cpp" 353
+                             "8l7v5e")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4090
+                             "3sfoa8")
+                            ("/Users/spookymac/dev/flagV/src/csr.h" 2075
+                             "zkhafe")
+                            ("/Users/spookymac/dev/flagV/src/system.cpp" 4090
+                             "397q9s")])
+                     -1)))
+              (buffer "cpu_exec.cpp" (selected . t) (hscroll . 0)
+                      (fringes 8 8 t nil) (margins nil)
+                      (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0)
+                      (dedicated) (point . 24372) (start . 23845))
+              (prev-buffers ("*flagV-ghostel*" 90213 91604)
+                            ("system.cpp" 3787 4373) ("decode.cpp" 583 880)
+                            ("config.h" 1 226) ("system.h" 736 768)
+                            ("lde-riscv-privileged.org" 67196 68126)
+                            ("test_csr.cpp" 18 72) ("main.cpp" 1 324)
+                            ("decode.h" 1501 2097) ("variant" 70014 70520)
+                            ("invoke.h" 2603 3213) ("*ghostel*" 1 900)
+                            ("unreachable.h" 227 872) ("*doom*" 1 1507)
+                            ("ramblings.org" 1 699))))
+            (def-params ((last-project-root . "/Users/spookymac/dev/flagV/")))
+            nil nil nil)
+ (def-persp "#3"
+            ((def-buffer "lde-riscv-privileged.org"
+                         "/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                         org-mode))
+            (def-wconf
+             (((min-height . 4) (min-width . 10) (min-height-ignore . 3)
+               (min-width-ignore . 4) (min-height-safe . 1) (min-width-safe . 2)
+               (min-pixel-height . 80) (min-pixel-width . 90)
+               (min-pixel-height-ignore . 60) (min-pixel-width-ignore . 36)
+               (min-pixel-height-safe . 20) (min-pixel-width-safe . 18))
+              leaf (pixel-width . 1276) (pixel-height . 744) (total-width . 142)
+              (total-height . 37) (normal-height . 1.0) (normal-width . 1.0)
+              (parameters
+               (better-jumper-struct
+                . #s(better-jumper-jump-list-struct
+                     (0 1
+                        . [("/Users/spookymac/org/readingDocs/riscv/lde-riscv-privileged.org"
+                            68033 "qvxhwf")
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil nil nil nil nil nil
+                           nil nil nil nil nil nil nil nil])
+                     -1)))
+              (buffer "lde-riscv-privileged.org" (selected . t) (hscroll . 0)
+                      (fringes 8 8 t nil) (margins nil)
+                      (scroll-bars nil 0 t nil 0 t nil) (vscroll . 0)
+                      (dedicated) (point . 68487) (start . 67371))
+              (prev-buffers ("*doom*" 1 1507) ("system.cpp" 3385 3998)
+                            ("cpu_exec.cpp" 11683 12434))))
+            (def-params ((last-project-root))) nil nil nil))

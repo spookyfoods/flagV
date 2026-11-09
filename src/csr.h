@@ -61,9 +61,12 @@ class CsrFile {
         case MIMPID:
             [[fallthrough]];
         case MHARTID:
-            return;
+            [[fallthrough]];
+        case MSTATUS:
+            [[fallthrough]];
         default:
-            std::unreachable();
+            return;
+            // std::unreachable();
         }
     }
 
@@ -78,6 +81,8 @@ class CsrFile {
             return mtval;
         case MTVEC:
             return mtvec;
+        case MSTATUS:
+            return mstatus;
 
         case MISA:
             [[fallthrough]];
@@ -88,9 +93,10 @@ class CsrFile {
         case MIMPID:
             [[fallthrough]];
         case MHARTID:
-            return 0;
+            [[fallthrough]];
         default:
-            std::unreachable();
+            return 0;
+            // std::unreachable();
         }
     }
 };

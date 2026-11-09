@@ -1,10 +1,18 @@
 #include "system.h"
 #include "csr.h"
 #include <cstdlib>
-#include <iostream>
 #include <print>
 
 Memory::Memory(size_t size, Counters& _ctrs) : m_data(size, 0), c_ctrs(_ctrs) {}
+
+void Memory::fail_loudly(uint32_t address, uint32_t pc, uint32_t width,
+                         const char* reason) const {
+    std::println(
+        stderr,
+        "[MEMORY FAULT] {} | Addr: 0x{:x} | PC: 0x{:x} | Width: {} bytes",
+        reason, address, pc, width);
+    std::abort();
+}
 
 size_t Memory::translate(uint32_t address, uint32_t pc, uint32_t width) const {
     if (address < MEM_BASE) {
@@ -17,16 +25,8 @@ size_t Memory::translate(uint32_t address, uint32_t pc, uint32_t width) const {
     return offset;
 }
 
-void Memory::fail_loudly(uint32_t address, uint32_t pc, uint32_t width,
-                         const char* reason) const {
-    std::cerr << "[MEMORY FAULT] " << reason << " | Addr: 0x" << std::hex
-              << address << " | PC: 0x" << pc << " | Width: " << std::dec
-              << width << " bytes\n";
-    std::abort();
-}
-
 uint32_t Memory::fetch32(uint32_t address) {
-    size_t offset = translate(address, address, 4);
+    size_t offset = translate(address, 0, 4);
     return static_cast<uint32_t>(m_data[offset]) |
            (static_cast<uint32_t>(m_data[offset + 1]) << 8) |
            (static_cast<uint32_t>(m_data[offset + 2]) << 16) |
@@ -56,22 +56,19 @@ uint32_t Memory::read32(uint32_t address, uint32_t pc) {
            (static_cast<uint32_t>(m_data[offset + 3]) << 24);
 }
 
-uint32_t CPU::csr_read(uint16_t num) const { return csrs[num]; }
-
 CPU::CPU(uint32_t _memSize)
     : m_ctrs(), m_regs(), m_mem(_memSize, m_ctrs), m_pc(Memory::MEM_BASE),
       m_result(ExecResult::Continue), m_priv_lvl(PrivLvl::M) {
 
     // Setting the value of register 2 aka sp (stack pointer)
     // Since the stack grows downwards, from a higher address to a lower address
-
     m_regs.write(2, Memory::MEM_BASE + _memSize);
 }
 
 void CPU::step() {
     uint32_t pcInc = 4;
     try {
-        auto word = m_mem.fetch32(m_pc);
+        auto word = fetch(m_pc);
         Instruction ins = decode(word);
 
         m_result = execute_context(ins, pcInc);
@@ -82,6 +79,7 @@ void CPU::step() {
     if (m_result == ExecResult::Fault) {
         return;
     }
+
     m_pc = m_pc + pcInc;
     m_ctrs.inc_icount();
     return;
@@ -105,6 +103,8 @@ ExecResult CPU::run(uint64_t max_steps) {
     return m_result;
 }
 
+uint32_t CPU::fetch(uint32_t addr) { return m_mem.fetch32(addr); }
+
 uint32_t CPU::reg(uint8_t i) const { return m_regs.read(i); }
 
 void CPU::load(std::vector<uint32_t> insVec, uint32_t startAddress) {
@@ -125,11 +125,14 @@ void CPU::take_trap_exception(const Trap& t) noexcept {
     m_csrfile.write(CSR::MCAUSE, t.mcause);
     m_csrfile.write(CSR::MTVAL, t.mtval);
 
+    //  Read-Modify-Write
+
+    /*Read*/
     std::bitset<32> old_mstatus = m_csrfile.read(CSR::MSTATUS);
 
+    /*Modify*/
     // mstatus.MPIE <- mstatus.MIE
     old_mstatus.set(7, old_mstatus[3]);
-
     // mstatus.MIE <- 0
     old_mstatus.set(3, 0);
 
@@ -138,12 +141,18 @@ void CPU::take_trap_exception(const Trap& t) noexcept {
     old_mstatus.set(11, 0);
     old_mstatus.set(12, 0);
 
+    /*Write*/
+
+    m_csrfile.write(CSR::MSTATUS, static_cast<reg_t>(old_mstatus.to_ulong()));
+
     // set hart's privilege level to Machine Mode
     m_priv_lvl = PrivLvl::M;
 
     // pc <- mtvec.BASE
     // Limiting to only DIRECT mode
     m_pc = m_csrfile.read(MTVEC) & 0b00;
+
+    // Write back modified mstatus
 }
 
 template <> void Memory::write<8>(uint32_t address, uint32_t pc, uint32_t val) {

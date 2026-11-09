@@ -1,0 +1,2 @@
+loader: 1042 instructions from 'others/tests/bins/rv32ui-p-add.bin'
+[MEMORY FAULT] Address Below MEM_BASE | Addr: 0x0 | PC: 0x0 | Width: 4 bytes
