@@ -5,6 +5,7 @@
 #include "decode.h"
 #include <array>
 #include <concepts>
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 

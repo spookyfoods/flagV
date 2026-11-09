@@ -3,9 +3,15 @@
  * @brief Implementing Opcodes ://
  */
 #include "config.h"
+
+#include "csr.h"
+#include "decode.h"
 #include "system.h"
 #include "trace.h"
+#include <bitset>
+#include <cstdint>
 #include <iostream>
+#include <variant>
 
 ///@brief Anonymous namespace for enums to identify instructions from their
 /// fields

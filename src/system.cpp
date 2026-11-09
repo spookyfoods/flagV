@@ -1,5 +1,6 @@
 #include "system.h"
 #include "csr.h"
+#include <bitset>
 #include <cstdlib>
 #include <print>
 
