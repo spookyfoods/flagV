@@ -5,6 +5,7 @@
 #include "config.h"
 #include "system.h"
 #include "trace.h"
+#include <bitset>
 #include <iostream>
 
 ///@brief Anonymous namespace for enums to identify instructions from their
