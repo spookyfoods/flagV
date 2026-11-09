@@ -75,6 +75,7 @@ void CPU::step() {
     } catch (const Trap& t) {
         take_trap_exception(t);
         m_result = ExecResult::Continue;
+        return;
     }
     if (m_result == ExecResult::Fault) {
         return;
@@ -150,7 +151,8 @@ void CPU::take_trap_exception(const Trap& t) noexcept {
 
     // pc <- mtvec.BASE
     // Limiting to only DIRECT mode
-    m_pc = m_csrfile.read(MTVEC) & 0b00;
+    m_pc = m_csrfile.read(MTVEC) &
+           static_cast<reg_t>(static_cast<int32_t>(~0) << 2);
 
     // Write back modified mstatus
 }

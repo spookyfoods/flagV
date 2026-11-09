@@ -384,8 +384,8 @@ ExecResult CPU::execute_context(const Instruction& instruction,
                                 CSR::MSTATUS,
                                 static_cast<reg_t>(old_mstatus.to_ulong()));
                             m_priv_lvl = mpp_read;
-                            m_pc = m_csrfile.read(CSR::MEPC);
 
+                            pcInc = m_csrfile.read(CSR::MEPC) - m_pc;
                             return ExecResult::Continue;
                         }
 

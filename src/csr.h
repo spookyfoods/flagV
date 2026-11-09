@@ -46,12 +46,18 @@ class CsrFile {
         switch (funct12) {
         case MEPC:
             mepc = value;
+            return;
         case MCAUSE:
             mcause = value;
+            return;
         case MTVAL:
             mtval = value;
+            return;
         case MTVEC:
             mtvec = value;
+            return;
+        case MIE:
+            [[fallthrough]];
         case MISA:
             [[fallthrough]];
         case MVENDORID:
@@ -59,6 +65,8 @@ class CsrFile {
         case MARCHID:
             [[fallthrough]];
         case MIMPID:
+            [[fallthrough]];
+        case MIP:
             [[fallthrough]];
         case MHARTID:
             [[fallthrough]];
@@ -84,7 +92,11 @@ class CsrFile {
         case MSTATUS:
             return mstatus;
 
+        case MIP:
+            [[fallthrough]];
         case MISA:
+            [[fallthrough]];
+        case MIE:
             [[fallthrough]];
         case MVENDORID:
             [[fallthrough]];
