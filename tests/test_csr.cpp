@@ -11,9 +11,6 @@ TEST_CASE("CSR Access") {
         REQUIRE(csr.isAccessValid(0xF14, PrivLvl::S, false) == false);
         REQUIRE(csr.isAccessValid(0xF14, PrivLvl::M, true) == true);
         REQUIRE(csr.isAccessValid(0xF14, PrivLvl::M, false) == true);
-
-        // This will fail
-        REQUIRE(csr.isAccessValid(0xF14, PrivLvl::U, true) == true);
     }
 }
 

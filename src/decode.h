@@ -12,92 +12,95 @@
 
 /// @brief RV32 base ISA decoding primitives.
 namespace RV32 {
-    /**
-     * @brief Generates a contiguous 32-Bit Mask for bit ranges [i,j],
-     * inclusive.
-     * @param i 1s filling, starting point
-     * @param j 1s filling, finishing point
-     * @return 32-bit unsigned integer with bits [i, j] set to 1.
-     * @code{.cpp}
-     * uint32_t sample_mask = getAndMask(12, 25);
-     * //returns -> 0b0000'0011'1111'1111'1111'0000'0000'0000
-     * @endcode
-     * @note Evaluated STRICTLY at compile-time
-     * */
-    consteval auto getAndMask(int i, int j) -> uint32_t {
-        int k = j - i + 1;
-        uint32_t num = (1u << k) - 1;
-        num <<= i;
-        return num;
-    }
-    /**
-     * @name Basic RV32 instruction field bit-masks
-     * @{
-     */
-    constexpr uint32_t OPCODE_MASK = getAndMask(0, 6);   ///< [6:0]
-    constexpr uint32_t RD_MASK = getAndMask(7, 11);      ///< [11:7]
-    constexpr uint32_t FUNCT3_MASK = getAndMask(12, 14); ///< [14:12]
-    constexpr uint32_t RS1_MASK = getAndMask(15, 19);    ///< [19:15]
-    constexpr uint32_t RS2_MASK = getAndMask(20, 24);    ///< [24:20]
-    constexpr uint32_t FUNCT7_MASK = getAndMask(25, 31); ///< [31:25]
-    /** @}*/
+/**
+ * @brief Generates a contiguous 32-Bit Mask for bit ranges [i,j],
+ * inclusive.
+ * @param i 1s filling, starting point
+ * @param j 1s filling, finishing point
+ * @return 32-bit unsigned integer with bits [i, j] set to 1.
+ * @code{.cpp}
+ * uint32_t sample_mask = getAndMask(12, 25);
+ * //returns -> 0b0000'0011'1111'1111'1111'0000'0000'0000
+ * @endcode
+ * @note Evaluated STRICTLY at compile-time
+ * */
+consteval auto getAndMask(int i, int j) -> uint32_t {
+    int k = j - i + 1;
+    uint32_t num = (1u << k) - 1;
+    num <<= i;
+    return num;
+}
 
-    /// @brief Base Namespace, only to stress the extractors are base and not
-    /// instruction specifc
-    namespace base {
-        /**
-         * @name Base Instruction Field Extractors
-         * Common behavior across all extractors:
-         * @note The returned masked value is BOTH consumption-ready and in its
-         * numerically accurate unsigned integer form without padding.
-         * @{
-         */
+/**
+ * @name Basic RV32 instruction field bit-masks
+ * @{
+ */
+constexpr uint32_t OPCODE_MASK = getAndMask(0, 6);   ///< [6:0]
+constexpr uint32_t RD_MASK = getAndMask(7, 11);      ///< [11:7]
+constexpr uint32_t FUNCT3_MASK = getAndMask(12, 14); ///< [14:12]
+constexpr uint32_t RS1_MASK = getAndMask(15, 19);    ///< [19:15]
+constexpr uint32_t RS2_MASK = getAndMask(20, 24);    ///< [24:20]
+constexpr uint32_t FUNCT7_MASK = getAndMask(25, 31); ///< [31:25]
+/** @}*/
 
-        /// @brief Extracts the operation code (opcode).
-        /// @param ins The raw 32-bit instruction word to parse.
-        /// @return The masked opcode value as an unsigned 8-bit integer.
-        inline constexpr auto get_opcode(uint32_t ins) -> uint8_t {
-            return (ins & OPCODE_MASK);
-        }
+/// @brief Base Namespace, only to stress the extractors are base and not
+/// instruction specifc
+namespace base {
+/**
+ * @name Base Instruction Field Extractors
+ * Common behavior across all extractors:
+ * @note The returned masked value is BOTH consumption-ready and in its
+ * numerically accurate unsigned integer form without padding.
+ * @{
+ */
 
-        /// @brief Extracts the destination register (rd).
-        /// @param ins The raw 32-bit instruction word to parse.
-        /// @return The masked rd register index as an unsigned 8-bit integer.
-        inline constexpr auto get_rd(uint32_t ins) -> uint8_t {
-            return (ins & RD_MASK) >> 7;
-        }
+/// @brief Extracts the operation code (opcode).
+/// @param ins The raw 32-bit instruction word to parse.
+/// @return The masked opcode value as an unsigned 8-bit integer.
+inline constexpr auto get_opcode(uint32_t ins) -> uint8_t {
+    return (ins & OPCODE_MASK);
+}
 
-        /// @brief Extracts the funct3 field.
-        /// @param ins The raw 32-bit instruction word to parse.
-        /// @return The masked funct3 as an unsigned 8-bit integer.
-        inline constexpr auto get_funct3(uint32_t ins) -> uint8_t {
-            return (ins & FUNCT3_MASK) >> 12;
-        }
+/// @brief Extracts the destination register (rd).
+/// @param ins The raw 32-bit instruction word to parse.
+/// @return The masked rd register index as an unsigned 8-bit integer.
+inline constexpr auto get_rd(uint32_t ins) -> uint8_t {
+    return (ins & RD_MASK) >> 7;
+}
 
-        /// @brief Extracts the source register 1 (rs1).
-        /// @param ins The raw 32-bit instruction word to parse.
-        /// @return The masked rs1 as an unsigned 8-bit integer.
-        inline constexpr auto get_rs1(uint32_t ins) -> uint8_t {
-            return (ins & RS1_MASK) >> 15;
-        }
+/// @brief Extracts the funct3 field.
+/// @param ins The raw 32-bit instruction word to parse.
+/// @return The masked funct3 as an unsigned 8-bit integer.
+inline constexpr auto get_funct3(uint32_t ins) -> uint8_t {
+    return (ins & FUNCT3_MASK) >> 12;
+}
 
-        /// @brief Extracts the source register 2 (rs2).
-        /// @param ins The raw 32-bit instruction word to parse.
-        /// @return The masked rs2 as an unsigned 8-bit integer.
-        inline constexpr auto get_rs2(uint32_t ins) -> uint8_t {
-            return (ins & RS2_MASK) >> 20;
-        }
+/// @brief Extracts the source register 1 (rs1).
+/// @param ins The raw 32-bit instruction word to parse.
+/// @return The masked rs1 as an unsigned 8-bit integer.
+inline constexpr auto get_rs1(uint32_t ins) -> uint8_t {
+    return (ins & RS1_MASK) >> 15;
+}
 
-        /// @brief Extracts the funct7 field.
-        /// @param ins The raw 32-bit instruction word to parse.
-        /// @return The masked funct7 as an unsigned 8-bit integer.
-        inline constexpr auto get_funct7(uint32_t ins) -> uint8_t {
-            return (ins & FUNCT7_MASK) >> 25;
-        }
-        /** @} */
-    } // namespace base
+/// @brief Extracts the source register 2 (rs2).
+/// @param ins The raw 32-bit instruction word to parse.
+/// @return The masked rs2 as an unsigned 8-bit integer.
+inline constexpr auto get_rs2(uint32_t ins) -> uint8_t {
+    return (ins & RS2_MASK) >> 20;
+}
+
+/// @brief Extracts the funct7 field.
+/// @param ins The raw 32-bit instruction word to parse.
+/// @return The masked funct7 as an unsigned 8-bit integer.
+inline constexpr auto get_funct7(uint32_t ins) -> uint8_t {
+    return (ins & FUNCT7_MASK) >> 25;
+}
+
+/** @} */
+} // namespace base
 
 } // namespace RV32
+
 // ANCHOR-END: RV32
 
 /**
@@ -112,17 +115,25 @@ namespace RV32 {
  */
 struct RType {
     uint32_t raw;
+
     constexpr uint8_t get_rd() const { return RV32::base::get_rd(raw); }
+
     constexpr uint8_t get_funct3() const { return RV32::base::get_funct3(raw); }
+
     constexpr uint8_t get_rs1() const { return RV32::base::get_rs1(raw); }
+
     constexpr uint8_t get_rs2() const { return RV32::base::get_rs2(raw); }
+
     constexpr uint8_t get_funct7() const { return RV32::base::get_funct7(raw); }
 };
 
 struct IType {
     uint32_t raw;
+
     constexpr uint8_t get_rd() const { return RV32::base::get_rd(raw); }
+
     constexpr uint8_t get_funct3() const { return RV32::base::get_funct3(raw); }
+
     constexpr uint8_t get_rs1() const { return RV32::base::get_rs1(raw); }
 
     /**
@@ -144,8 +155,11 @@ struct IType {
 
 struct SType {
     uint32_t raw;
+
     constexpr uint8_t get_funct3() const { return RV32::base::get_funct3(raw); }
+
     constexpr uint8_t get_rs1() const { return RV32::base::get_rs1(raw); }
+
     constexpr uint8_t get_rs2() const { return RV32::base::get_rs2(raw); }
 
     /**
@@ -170,8 +184,11 @@ struct SType {
 
 struct BType {
     uint32_t raw;
+
     constexpr uint8_t get_funct3() const { return RV32::base::get_funct3(raw); }
+
     constexpr uint8_t get_rs1() const { return RV32::base::get_rs1(raw); }
+
     constexpr uint8_t get_rs2() const { return RV32::base::get_rs2(raw); }
 
     /**
@@ -209,6 +226,7 @@ struct BType {
 
 struct UType {
     uint32_t raw;
+
     constexpr uint8_t get_rd() const { return RV32::base::get_rd(raw); }
 
     /**
@@ -233,7 +251,9 @@ struct UType {
 
 struct JType {
     uint32_t raw;
+
     constexpr uint8_t get_rd() const { return RV32::base::get_rd(raw); }
+
     /**
      * @brief Reassembles and sign-extends the 21-bit jump offset.
      *
@@ -259,6 +279,7 @@ struct JType {
                    ((raw & 0x00100000) >> 9) |  // Bit [20] -> [11]
                    ((raw & 0x7FE00000) >> 20)); // Bits [30:21] -> [10:1]
     }
+
     constexpr int32_t get_imm() {
         int32_t imm = (static_cast<int32_t>(raw & 0x80000000)) >> 11;
         imm |= (raw & 0x000FF000);
@@ -268,6 +289,7 @@ struct JType {
         return imm;
     }
 };
+
 /** @} */
 
 using Instruction = std::variant<RType, IType, SType, BType, UType, JType>;

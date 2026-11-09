@@ -214,8 +214,14 @@ class CPU {
     ExecResult m_result;
     PrivLvl m_priv_lvl;
     CsrFile m_csrfile;
+    uint32_t m_tohost_addr;
+    uint32_t m_tohost_val;
 
   public:
+    void set_tohost(uint32_t addr) { m_tohost_addr = addr; }
+
+    uint32_t tohost_value() const { return m_tohost_val; }
+
     CPU(uint32_t _memSize);
     void step();
     ExecResult run(uint64_t max_steps);

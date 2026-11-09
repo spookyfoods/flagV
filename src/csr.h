@@ -2,7 +2,6 @@
 #define CSR_H
 #include <concepts>
 #include <cstdint>
-#include <utility>
 enum class PrivLvl : uint8_t { U = 0b00, S = 0b01, M = 0b11 };
 using reg_t = uint32_t;
 

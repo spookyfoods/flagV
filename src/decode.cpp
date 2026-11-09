@@ -2,7 +2,6 @@
 #include "config.h"
 #include "csr.h"
 #include <iostream>
-#include <stdexcept>
 
 auto decode(uint32_t raw_inst) -> Instruction {
     if constexpr (config::EXECUTE_CONTEXT_VERBOSE)

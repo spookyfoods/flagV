@@ -83,7 +83,13 @@ void CPU::step() {
 
     m_pc = m_pc + pcInc;
     m_ctrs.inc_icount();
-    return;
+    if (m_tohost_addr) {
+        const uint32_t value = m_mem.fetch32(m_tohost_addr);
+        if (value != 0) {
+            m_tohost_val = value;
+            m_result = ExecResult::Halt;
+        }
+    }
 }
 
 ExecResult CPU::run(uint64_t max_steps) {
